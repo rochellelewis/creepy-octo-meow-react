@@ -5,7 +5,7 @@ export const Footer = () => (
 		<div className="container-fluid">
 			<div className="row">
 				<div className="col-sm-6 text-center text-sm-left small">
-					Meow App 6.0 => An Angularific Demo.
+					Meow App 6.0 => A Reactastic Demo.
 				</div>
 				<div className="col-sm-6 text-center text-sm-right small">
 					<i className="fa fa-github"></i>&nbsp;<a className="text-muted"
