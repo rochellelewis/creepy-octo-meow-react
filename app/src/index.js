@@ -16,11 +16,13 @@ const Routing = () => (
 	<>
 
 		<BrowserRouter>
-			<NavBar/>
-			<Switch>
-				<Route exact path="/" component={Home}/>
-				<Route component={FourOhFour}/>
-			</Switch>
+			<div className="sfooter-content">
+				<NavBar/>
+				<Switch>
+					<Route exact path="/" component={Home}/>
+					<Route component={FourOhFour}/>
+				</Switch>
+			</div>
 			<Footer/>
 		</BrowserRouter>
 

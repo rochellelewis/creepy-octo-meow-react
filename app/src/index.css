@@ -68,9 +68,10 @@ body { width: 100%;}
 body {
 	background-color: #000;
 	position: relative;
+	background: url("shared/img/meow-app.jpg") no-repeat 40% center;
 }
 
-body::after {
+/*body::after {
 	content: "";
 	background: url("shared/img/meow-app.jpg") no-repeat 40% center;
 	background-attachment: fixed;
@@ -79,7 +80,7 @@ body::after {
 	height: 100%;
 	width: 100%;
 	z-index: -1;
-}
+}*/
 
 @media only screen and (min-width: 768px) {
 	body::after {
