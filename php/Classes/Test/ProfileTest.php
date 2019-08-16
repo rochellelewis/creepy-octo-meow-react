@@ -3,9 +3,6 @@
 
  use Edu\Cnm\CreepyOctoMeow\Profile;
 
- //grab the project test parameters
- require_once("CreepyOctoMeowTest.php");
-
  //grab the class under scrutiny
  require_once (dirname(__DIR__) . "/autoload.php");
 
@@ -26,13 +23,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 	 * Profile activation token
 	 * @var string $VALID_ACTIVATION
 	 **/
-	protected $VALID_ACTIVATION = "aae04b1d8089795764c5f759ab387872";
-
-	/**
-	 * Profile activation token - to test invalid case. this will not be inserted
-	 * @var string $VALID_ACTIVATION_2
-	 **/
-	protected $VALID_ACTIVATION_2 = "c3036bf1d0a1eb478dcc03c93fda5383";
+	protected $VALID_ACTIVATION;
 
 	/**
 	 * Profile email address
@@ -44,19 +35,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 	 * Profile password hash
 	 * @var string $VALID_HASH
 	 **/
-	protected $VALID_HASH = null;
-
-	/**
-	 * Profile password to use in test
-	 * @var string $PASSWORD
-	 **/
-	protected $PASSWORD = "password123";
-
-	/**
-	 * Profile password salt
-	 * @var string $VALID_SALT
-	 **/
-	protected $VALID_SALT = null;
+	protected $VALID_HASH;
 
 	/**
 	 * Profile password username
@@ -77,11 +56,12 @@ class ProfileTest extends CreepyOctoMeowTest {
 		//run the default setUp() method first
 		parent::setUp();
 
-		//create valid salt
-		$this->VALID_SALT = bin2hex(random_bytes(32));
+		//create valid activation token
+		$this->VALID_ACTIVATION = bin2hex(random_bytes(16));
 
 		//create valid password hash
-		$this->VALID_HASH = hash_pbkdf2("sha512", $this->PASSWORD, $this->VALID_SALT, 262144);
+		$password = "abc123";
+		$this->VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
 	}
 
 	/**
@@ -93,7 +73,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//grab profile back from mysql and verify all fields match
@@ -103,7 +83,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileUsername(), $this->VALID_USERNAME);
 	}
 
@@ -117,7 +96,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//edit the profile and run update method
@@ -131,7 +110,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileUsername(), $this->VALID_USERNAME_2);
 	}
 
@@ -144,7 +122,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//delete the profile we just made
@@ -174,7 +152,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//grab profile back from mysql and check that all fields match
@@ -184,7 +162,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileUsername(), $this->VALID_USERNAME);
 	}
 
@@ -193,7 +170,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 	 **/
 	public function testGetInvalidProfileByProfileActivationToken() {
 		//try and grab a profile by an activation token that doesn't exist
-		$profile = Profile::getProfileByProfileActivationToken($this->getPDO(), $this->VALID_ACTIVATION_2);
+		$profile = Profile::getProfileByProfileActivationToken($this->getPDO(), "6675636b646f6e616c646472756d7066");
 		$this->assertNull($profile);
 	}
 
@@ -206,7 +183,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//grab profile back from mysql and check that all fields match
@@ -215,7 +192,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileId(), $profileId);
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileUsername(), $this->VALID_USERNAME);
 	}
 
@@ -237,7 +213,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//grab profile back from mysql and check that all fields match
@@ -247,7 +223,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 	}
 
 	/**
@@ -268,7 +243,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create new profile and insert
 		$profileId = generateUuidV4();
-		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_USERNAME);
+		$profile = new Profile($profileId, $this->VALID_ACTIVATION, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_USERNAME);
 		$profile->insert($this->getPDO());
 
 		//grab all profiles back from mysql and check that the count matches
@@ -283,7 +258,6 @@ class ProfileTest extends CreepyOctoMeowTest {
 		$this->assertEquals($pdoProfile->getProfileActivationToken(), $this->VALID_ACTIVATION);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
-		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileUsername(), $this->VALID_USERNAME);
 	}
 }
