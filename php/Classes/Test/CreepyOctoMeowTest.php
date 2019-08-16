@@ -8,7 +8,8 @@ use PHPUnit\DbUnit\Database\Connection;
 use PHPUnit\DbUnit\Operation\{Composite, Factory, Operation};
 
 // grab the encrypted properties file
-require_once("/etc/apache2/capstone-mysql/Secrets.php");
+require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
+//require_once("/etc/apache2/capstone-mysql/Secrets.php");
 
 //grab the class under scrutiny
 require_once(dirname(__DIR__) . "/autoload.php");
@@ -89,9 +90,12 @@ abstract class CreepyOctoMeowTest extends TestCase {
 		// if the connection hasn't been established, create it
 		if($this->connection === null) {
 			// connect to mySQL and provide the interface to PHPUnit
-			$secrets = new Secrets("/etc/apache2/capstone-mysql/rlewis37.ini");
+			$config = readConfig("/etc/apache2/capstone-mysql/rlewis37.ini");
+			$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/rlewis37.ini");
+			$this->connection = $this->createDefaultDBConnection($pdo, $config["database"]);
+			/*$secrets = new Secrets("/etc/apache2/capstone-mysql/rlewis37.ini");
 			$pdo = $secrets->getPdoObject();
-			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());
+			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());*/
 		}
 		return($this->connection);
 	}
