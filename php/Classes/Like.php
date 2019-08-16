@@ -2,7 +2,7 @@
 namespace Edu\Cnm\CreepyOctoMeow;
 
 require_once ("autoload.php");
-require_once (dirname(__DIR__, 1) . "/vendor/autoload.php");
+require_once (dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
@@ -230,7 +230,7 @@ class Like implements \JsonSerializable {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when a variable are not the correct data type
 	 **/
-	public static function getLikeByLikePostIdAndLikeProfileId(\PDO $pdo, $likePostId, $likeProfileId) : \SplFixedArray {
+	public static function getLikeByLikePostIdAndLikeProfileId(\PDO $pdo, $likePostId, $likeProfileId) : ?Like {
 		//sanitize the post and profile ids before searching
 		try {
 			$likePostId = self::validateUuid($likePostId);
