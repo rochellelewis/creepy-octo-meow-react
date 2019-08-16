@@ -8,9 +8,10 @@ use PHPUnit\DbUnit\Database\Connection;
 use PHPUnit\DbUnit\Operation\{Composite, Factory, Operation};
 
 // grab the encrypted properties file
-require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
+// require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
+require_once("/etc/apache2/capstone-mysql/Secret.php");
 
-require_once(dirname(__DIR__, 3) . "/vendor/autoload.php");
+require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 
 /**
  * Abstract class containing universal and project specific mySQL parameters
@@ -29,13 +30,6 @@ require_once(dirname(__DIR__, 3) . "/vendor/autoload.php");
  **/
 abstract class CreepyOctoMeowTest extends TestCase {
 	use TestCaseTrait;
-
-	/**
-	 * invalid id to use for an INT UNSIGNED field (maximum allowed INT UNSIGTNED in mySQL) + 1
-	 * @see https://dev.mysql.com/doc/refman/5.6/en/integer-types.html mySQL Integer Types
-	 * @var int INVALID_KEY
-	 **/
-	const INVALID_KEY = 4294967296;
 
 	/**
 	 * PHPUnit database connection interface
@@ -68,7 +62,7 @@ abstract class CreepyOctoMeowTest extends TestCase {
 	 * @see https://github.com/sebastianbergmann/dbunit/issues/37 TRUNCATE fails on tables which have foreign key constraints
 	 * @return Composite array containing delete and insert commands
 	 **/
-	public final function getSetUpOperation() {
+	public final function getSetUpOperation() : Composite {
 		return new Composite([
 			Factory::DELETE_ALL(),
 			Factory::INSERT()
@@ -80,7 +74,7 @@ abstract class CreepyOctoMeowTest extends TestCase {
 	 *
 	 * @return Operation delete command for the database
 	 **/
-	public final function getTearDownOperation() {
+	public final function getTearDownOperation() : Operation {
 		return(Factory::DELETE_ALL());
 	}
 
@@ -90,13 +84,13 @@ abstract class CreepyOctoMeowTest extends TestCase {
 	 * @see <https://phpunit.de/manual/current/en/database.html#database.configuration-of-a-phpunit-database-testcase>
 	 * @return Connection PHPUnit database connection interface
 	 **/
-	public final function getConnection() {
+	public final function getConnection() : Connection {
 		// if the connection hasn't been established, create it
 		if($this->connection === null) {
 			// connect to mySQL and provide the interface to PHPUnit
-			$config = readConfig("/etc/apache2/capstone-mysql/rlewis37.ini");
-			$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/rlewis37.ini");
-			$this->connection = $this->createDefaultDBConnection($pdo, $config["database"]);
+			$secrets = new Secrets("/etc/apache2/capstone-mysql/rlewis37.ini");
+			$pdo = $secrets->getPdoObject();
+			$this->connection = $this->createDefaultDBConnection($pdo, $secrets->getDatabase());
 		}
 		return($this->connection);
 	}
