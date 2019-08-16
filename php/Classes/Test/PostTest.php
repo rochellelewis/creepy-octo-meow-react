@@ -74,11 +74,10 @@ class PostTest extends CreepyOctoMeowTest {
 
 		//create and insert a profile to be the author of the test post
 		$activation = bin2hex(random_bytes(16));
-		$salt = bin2hex(random_bytes(32));
-		$hash = hash_pbkdf2("sha512", "password123", $salt, 262144);
+		$hash = password_hash("abc123", PASSWORD_ARGON2I, ["time_cost" => 384]);
 		$profileId = generateUuidV4();
 
-		$this->profile = new Profile($profileId, $activation, "drumpf@tinyhands.ru", $hash, $salt, "bernie");
+		$this->profile = new Profile($profileId, $activation, "drumpf@tinyhands.ru", $hash,  "bernie");
 		$this->profile->insert($this->getPDO());
 
 		//create a valid date for the Post
