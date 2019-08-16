@@ -2,7 +2,7 @@
 namespace Edu\Cnm\CreepyOctoMeow;
 
 require_once ("autoload.php");
-require_once (dirname(__DIR__, 1) . "/vendor/autoload.php");
+require_once (dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
@@ -181,6 +181,7 @@ class Post implements \JsonSerializable {
 	 * @param \DateTime|string|null $newPostDate post date as a DateTime object, string, or null value
 	 * @throws \InvalidArgumentException if $newPostDate is not a valid object or string
 	 * @throws \RangeException if $newPostDate is a date that does not exist
+	 * @throws \TypeError if $newPostDate is not a valid DateTime object
 	 **/
 	public function setPostDate($newPostDate = null) : void {
 		//base case: if post date is null, use current date and time
@@ -257,9 +258,7 @@ class Post implements \JsonSerializable {
 			"postDate" => $formattedDate,
 			"postTitle" => $this->postTitle
 		];
-
 		$statement->execute($parameters);
-
 	}
 
 	/**
