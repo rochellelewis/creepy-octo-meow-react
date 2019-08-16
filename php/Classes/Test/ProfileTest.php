@@ -1,7 +1,7 @@
 <?php
  namespace Edu\Cnm\CreepyOctoMeow\Test;
 
- use Edu\Cnm\CreepyOctoMeow\Profile;
+ use Edu\Cnm\CreepyOctoMeow\{Profile};
 
  //grab the class under scrutiny
  require_once (dirname(__DIR__) . "/autoload.php");
@@ -52,7 +52,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 	/**
 	 * create dependent objects before running each test
 	 **/
-	public final function setUp() {
+	public final function setUp(): void {
 		//run the default setUp() method first
 		parent::setUp();
 

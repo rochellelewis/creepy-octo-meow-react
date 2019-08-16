@@ -68,7 +68,7 @@ class PostTest extends CreepyOctoMeowTest {
 	/**
 	 * create dependent objects before running each test
 	 **/
-	public final function setUp() {
+	public final function setUp() : void {
 		//run the default setUp() method first
 		parent::setUp();
 
