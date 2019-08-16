@@ -3,7 +3,7 @@
 namespace Edu\Cnm\CreepyOctoMeow;
 
 require_once ("autoload.php");
-require_once (dirname(__DIR__, 1) . "/vendor/autoload.php");
+require_once (dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
@@ -45,12 +45,6 @@ class Profile implements \JsonSerializable {
 	private $profileHash;
 
 	/**
-	 * Salt for the Profile password hash value.
-	 * @var string $profileSalt
-	 **/
-	private $profileSalt;
-
-	/**
 	 * User name for the Profile. This is unique.
 	 * @var string $profileUsername
 	 **/
@@ -63,20 +57,18 @@ class Profile implements \JsonSerializable {
 	 * @param string|null $newProfileActivationToken activation token for this Profile
 	 * @param string $newProfileEmail email address for this Profile
 	 * @param string $newProfileHash hash value for the Profile password
-	 * @param string $newProfileSalt salt for the hash value for the Profile password
 	 * @param string $newProfileUsername Username for the Profile
 	 * @throws \InvalidArgumentException if data types are not valid
 	 * @throws \RangeException if data values are out of bounds
 	 * @throws \TypeError if data types violate type hints
 	 * @throws \Exception if other exceptions occur
 	 **/
-	public function __construct($newProfileId, ?string $newProfileActivationToken, string $newProfileEmail, string $newProfileHash, string $newProfileSalt, string $newProfileUsername) {
+	public function __construct($newProfileId, ?string $newProfileActivationToken, string $newProfileEmail, string $newProfileHash, string $newProfileUsername) {
 		try {
 			$this->setProfileId($newProfileId);
 			$this->setProfileActivationToken($newProfileActivationToken);
 			$this->setProfileEmail($newProfileEmail);
 			$this->setProfileHash($newProfileHash);
-			$this->setProfileSalt($newProfileSalt);
 			$this->setProfileUsername($newProfileUsername);
 		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
@@ -183,7 +175,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//check profile email length
-		if(strlen($newProfileEmail) > 64) {
+		if(strlen($newProfileEmail) > 128) {
 			throw (new \RangeException("Profile email is too long."));
 		}
 
@@ -204,8 +196,8 @@ class Profile implements \JsonSerializable {
 	 * mutator method for profile password hash
 	 *
 	 * @param string $newProfileHash new value of profile password hash
-	 * @throws \InvalidArgumentException if $newProfileHash is empty, or not a valid hash value
-	 * @throws \RangeException if $newProfileHash is not 128 characters
+	 * @throws \InvalidArgumentException if $newProfileHash is empty, insecure, or not a valid argon hash
+	 * @throws \RangeException if $newProfileHash is not 97 characters
 	 * @throws \TypeError if $newProfileHash is not a string
 	 **/
 	public function setProfileHash(string $newProfileHash) : void {
@@ -216,57 +208,19 @@ class Profile implements \JsonSerializable {
 			throw (new \InvalidArgumentException("Profile password hash empty or insecure."));
 		}
 
-		//check if valid hash value
-		if(!ctype_xdigit($newProfileHash)) {
-			throw (new \InvalidArgumentException("Profile password hash is not a valid hash value."));
+		//check if valid Argon hash value
+		$profileHashInfo = password_get_info($newProfileHash);
+		if($profileHashInfo["algoName"] !== "argon2i") {
+			throw (new \InvalidArgumentException("Profile password hash is invalid."));
 		}
 
 		//check if valid length
-		if(strlen($newProfileHash) !== 128) {
-			throw (new \RangeException("Profile password hash invalid length"));
+		if(strlen($newProfileHash) !== 97) {
+			throw (new \RangeException("Profile password hash invalid length."));
 		}
 
 		//store password hash value
 		$this->profileHash = $newProfileHash;
-	}
-
-	/**
-	 * accessor method for profile password salt
-	 *
-	 * @return string value of profile password salt
-	 **/
-	public function getProfileSalt() :string {
-		return($this->profileSalt);
-	}
-
-	/**
-	 * mutator method for profile password salt
-	 *
-	 * @param string $newProfileSalt new value of profile password hash salt
-	 * @throws \InvalidArgumentException if $newProfileSalt is empty, or not a valid hash value
-	 * @throws \RangeException if $newProfileSalt is not 32 characters
-	 * @throws \TypeError if $newProfileSalt is not a string
-	 **/
-	public function setProfileSalt(string $newProfileSalt) :void {
-		//trim, filter salt value
-		$newProfileSalt = trim($newProfileSalt);
-		$newProfileSalt = filter_var($newProfileSalt, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileSalt) === true){
-			throw (new \InvalidArgumentException("Profile salt value is invalid or insecure."));
-		}
-
-		//check if valid hash value
-		if(!ctype_xdigit($newProfileSalt)) {
-			throw (new \InvalidArgumentException("Profile salt is not a valid hash value."));
-		}
-
-		//check for valid length
-		if(strlen($newProfileSalt) !== 64) {
-			throw (new \RangeException("Profile salt is invalid length."));
-		}
-
-		//store salt value
-		$this->profileSalt = $newProfileSalt;
 	}
 
 	/**
@@ -287,7 +241,6 @@ class Profile implements \JsonSerializable {
 	 * @throws \TypeError if $newProfileUsername is not a string
 	 **/
 	public function setProfileUsername(string $newProfileUsername) : void {
-		//trim, filter profile username
 		$newProfileUsername = trim($newProfileUsername);
 		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProfileUsername) === true) {
@@ -313,7 +266,7 @@ class Profile implements \JsonSerializable {
 	public function insert(\PDO $pdo) : void {
 
 		//create query template
-		$query = "INSERT INTO profile(profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername) VALUES(:profileId, :profileActivationToken, :profileEmail, :profileHash, :profileSalt, :profileUsername)";
+		$query = "INSERT INTO profile(profileId, profileActivationToken, profileEmail, profileHash, profileUsername) VALUES(:profileId, :profileActivationToken, :profileEmail, :profileHash, :profileUsername)";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables to the placeholders in the query template
@@ -322,7 +275,6 @@ class Profile implements \JsonSerializable {
 			"profileActivationToken" => $this->profileActivationToken,
 			"profileEmail" => $this->profileEmail,
 			"profileHash" => $this->profileHash,
-			"profileSalt" => $this->profileSalt,
 			"profileUsername" => $this->profileUsername
 		];
 		$statement->execute($parameters);
@@ -338,7 +290,7 @@ class Profile implements \JsonSerializable {
 	public function update(\PDO $pdo) : void {
 
 		//create query template
-		$query = "UPDATE profile SET profileActivationToken = :profileActivationToken, profileEmail = :profileEmail, profileHash = :profileHash, profileSalt = :profileSalt, profileUsername = :profileUsername WHERE profileId = :profileId";
+		$query = "UPDATE profile SET profileActivationToken = :profileActivationToken, profileEmail = :profileEmail, profileHash = :profileHash, profileUsername = :profileUsername WHERE profileId = :profileId";
 		$statement = $pdo->prepare($query);
 
 		//bind member variables to the placeholders in the template
@@ -346,7 +298,6 @@ class Profile implements \JsonSerializable {
 			"profileActivationToken" =>$this->profileActivationToken,
 			"profileEmail" => $this->profileEmail,
 			"profileHash" => $this->profileHash,
-			"profileSalt" => $this->profileSalt,
 			"profileUsername" => $this->profileUsername,
 			"profileId" => $this->profileId->getBytes()
 		];
@@ -390,7 +341,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//create query template
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername FROM profile WHERE profileId = :profileId";
+		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileUsername FROM profile WHERE profileId = :profileId";
 		$statement = $pdo->prepare($query);
 
 		//bind profile id to placeholder in query template
@@ -403,13 +354,12 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileSalt"], $row["profileUsername"]);
+				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileUsername"]);
 			}
 		} catch(\Exception $exception) {
 			//if row can't be converted, rethrow it
 			throw (new \PDOException($exception->getMessage(), 0, $exception));
 		}
-
 		return($profile);
 	}
 
@@ -432,7 +382,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//create query template
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername FROM profile WHERE profileActivationToken = :profileActivationToken";
+		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileUsername FROM profile WHERE profileActivationToken = :profileActivationToken";
 		$statement = $pdo->prepare($query);
 
 		//bind profile id to placeholder in query template
@@ -445,13 +395,12 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileSalt"], $row["profileUsername"]);
+				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileUsername"]);
 			}
 		} catch(\Exception $exception) {
 			//if row can't be converted, rethrow it
 			throw (new \PDOException($exception->getMessage(), 0, $exception));
 		}
-
 		return($profile);
 	}
 
@@ -473,7 +422,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//create query template
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername FROM profile WHERE profileEmail = :profileEmail";
+		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileUsername FROM profile WHERE profileEmail = :profileEmail";
 		$statement = $pdo->prepare($query);
 
 		//bind profile id to placeholder in query template
@@ -486,13 +435,12 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileSalt"], $row["profileUsername"]);
+				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileUsername"]);
 			}
 		} catch(\Exception $exception) {
 			//if row can't be converted, rethrow it
 			throw (new \PDOException($exception->getMessage(), 0, $exception));
 		}
-
 		return($profile);
 	}
 
@@ -514,7 +462,7 @@ class Profile implements \JsonSerializable {
 		}
 
 		//create query template
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername FROM profile WHERE profileUsername = :profileUsername";
+		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileUsername FROM profile WHERE profileUsername = :profileUsername";
 		$statement = $pdo->prepare($query);
 
 		//bind profile id to placeholder in query template
@@ -527,13 +475,12 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileSalt"], $row["profileUsername"]);
+				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileUsername"]);
 			}
 		} catch(\Exception $exception) {
 			//if row can't be converted, rethrow it
 			throw (new \PDOException($exception->getMessage(), 0, $exception));
 		}
-
 		return($profile);
 	}
 
@@ -547,7 +494,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public static function getAllProfiles(\PDO $pdo) : \SplFixedArray {
 		//create query template
-		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileSalt, profileUsername FROM profile";
+		$query = "SELECT profileId, profileActivationToken, profileEmail, profileHash, profileUsername FROM profile";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -556,7 +503,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileSalt"], $row["profileUsername"]);
+				$profile = new Profile($row["profileId"], $row["profileActivationToken"], $row["profileEmail"], $row["profileHash"], $row["profileUsername"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -574,9 +521,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function jsonSerialize() {
 		$fields = get_object_vars($this);
-
 		$fields["profileId"] = $this->profileId->toString();
-
 		return($fields);
 	}
 }
