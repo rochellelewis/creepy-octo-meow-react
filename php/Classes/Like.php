@@ -46,9 +46,9 @@ class Like implements \JsonSerializable {
 		try {
 			$this->setLikePostId($newLikePostId);
 			$this->setLikeProfileId($newLikeProfileId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
-			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+			throw (new $exceptionType($exception->getMessage(), 0, $exception));
 		}
 	}
 
@@ -71,11 +71,10 @@ class Like implements \JsonSerializable {
 	public function setLikePostId($newLikePostId) : void {
 		try{
 			$uuid = self::validateUuid($newLikePostId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-
 		$this->likePostId->$uuid;
 	}
 
@@ -98,11 +97,10 @@ class Like implements \JsonSerializable {
 	public function setLikeProfileId($newLikeProfileId) : void {
 		try{
 			$uuid = self::validateUuid($newLikeProfileId);
-		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		} catch(\InvalidArgumentException | \RangeException | \TypeError | \Exception $exception) {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
-
 		$this->likeProfileId->$uuid;
 	}
 
@@ -115,7 +113,7 @@ class Like implements \JsonSerializable {
 	 **/
 	public function insert(\PDO $pdo) : void {
 		//create query template
-		$query = "INSERT INTO `like`(likePostId, likeProfileId) VALUES (:likePostId, :likeProfileId)";
+		$query = "INSERT INTO `like`(likePostId, likeProfileId) VALUES(:likePostId, :likeProfileId)";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables in place
@@ -267,7 +265,7 @@ class Like implements \JsonSerializable {
 	 *
 	 * @return array resulting state variables to serialize
 	 **/
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$fields = get_object_vars($this);
 		$fields["likePostId"] = $this->likePostId->toString();
 		$fields["likeProfileId"] = $this->likeProfileId->toString();
