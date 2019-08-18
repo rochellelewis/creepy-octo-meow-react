@@ -3,6 +3,7 @@ require_once (dirname(__DIR__, 3) . "/vendor/autoload.php");
 require_once (dirname(__DIR__, 3) . "/Classes/autoload.php");
 require_once (dirname(__DIR__, 3) . "/lib/xsrf.php");
 require_once (dirname(__DIR__, 3) . "/lib/uuid.php");
+require_once (dirname(__DIR__, 3) . "/lib/jwt.php");
 require_once ("/etc/apache2/capstone-mysql/encrypted-config.php");
 
 use Edu\Cnm\CreepyOctoMeow\Profile;
@@ -11,6 +12,10 @@ use Edu\Cnm\CreepyOctoMeow\Profile;
  * API for Profile class
  *
  * GET and PUT requests are supported.
+ * Users cannot DELETE their Profile. You can check out, but you can never leave.
+ *
+ * This API will need to be extended to support password update in the future.
+ * Currently only email and username updates are supported.
  *
  * @author Rochelle Lewis <rlewis37@cnm.edu>
  **/
@@ -41,13 +46,12 @@ try {
 
 	//sanitize and store input
 	$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	$profileActivationToken = filter_input(INPUT_GET, "profileActivationToken", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$profileEmail = filter_input(INPUT_GET, "profileEmail", FILTER_SANITIZE_EMAIL);
 	$profileUsername = filter_input(INPUT_GET, "profileUsername", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
-	//for PUT requests throw an exception if no valid $id
+	//for PUT requests throw an exception if $id is empty
 	if(($method === "PUT") && (empty($id) === true)) {
-		throw(new \InvalidArgumentException("Profile id is not valid.", 405));
+		throw(new \InvalidArgumentException("Profile id cannot be empty.", 405));
 	}
 
 	//begin if blocks for the various HTTP requests
@@ -55,57 +59,39 @@ try {
 
 		setXsrfCookie("/");
 
-		//grab profile/profiles based upon available input
+		//grab profile based upon available input
 		if(empty($id) === false) {
-
 			$profile = Profile::getProfileByProfileId($pdo, $id);
-			if($profile !== null) {
-				$reply->data = $profile;
-			}
-
-		} elseif(empty($profileActivationToken) === false) {
-
-			$profile = Profile::getProfileByProfileActivationToken($pdo, $profileActivationToken);
-			if($profile !== null) {
-				$reply->data = $profile;
-			}
+			$reply->data = $profile;
 
 		} elseif(empty($profileEmail) === false) {
-
 			$profile = Profile::getProfileByProfileEmail($pdo, $profileEmail);
-			if($profile !== null) {
-				$reply->data = $profile;
-			}
+			$reply->data = $profile;
 
 		} elseif(empty($profileUsername) === false) {
-
 			$profile = Profile::getProfileByProfileUsername($pdo, $profileUsername);
-			if($profile !== null) {
-				$reply->data = $profile;
-			}
+			$reply->data = $profile;
 
 		} else {
-
+			//who knows... we may want this!
 			$profiles = Profile::getAllProfiles($pdo)->toArray();
-			if($profiles !== null) {
-				$reply->data = $profiles;
-			}
-
+			$reply->data = $profiles;
 		}
 
 	} elseif($method === "PUT") {
 
-		//check xsrf token
+		//validate xsrf token and jwt header
 		verifyXsrf();
+		validateJwtHeader();
 
-		//grab request content, decode json into a php object
+		//restrict access to the profile if not actively logged in to the same profile!
+		if((empty($_SESSION["profile"]) === true) || ($_SESSION["profile"]->getProfileId()->toString() !== $id)) {
+			throw (new \InvalidArgumentException("U are not allowed to access this profile!", 403));
+		}
+
+		//grab request content, decode json
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
-
-		//restrict write access to profile if not actively logged in to the profile
-		if((empty($_SESSION["profile"]) === true) || ($_SESSION["profile"]->getProfileId() !== $id)) {
-			throw (new \Exception("U are not allowed to access this profile!", 403));
-		}
 
 		//retrieve profile to update
 		$profile = Profile::getProfileByProfileId($pdo, $id);
@@ -122,29 +108,6 @@ try {
 			$profile->setProfileUsername($requestObject->profileUsername);
 		}
 
-		//change password if requested and all required fields are passed
-		if(($requestObject->currentProfilePassword !== null) && ($requestObject->newProfilePassword !== null) && ($requestObject->newProfileConfirmPassword !== null)) {
-
-			//throw exception if current password given doesn't hash to match the current password!
-			$currentPasswordHash = hash_pbkdf2("sha512", $requestObject->currentProfilePassword, $profile->getProfileSalt(), 262144);
-			if($currentPasswordHash !== $profile->getProfileHash()) {
-				throw (new \RuntimeException("Current password is incorrect.", 401));
-			}
-
-			//throw exception if new password confirmation field doesn't match
-			if($requestObject->newProfilePassword !== $requestObject->newProfileConfirmPassword) {
-				throw (new \RuntimeException("New passwords do not match", 401));
-			}
-
-			//generate new salt and hash for new password
-			$newProfileSalt = bin2hex(random_bytes(32));
-			$newProfileHash = hash_pbkdf2("sha512", $requestObject->newProfilePassword, $newProfileSalt, 262144);
-
-			//update password
-			$profile->setProfileSalt($newProfileSalt);
-			$profile->setProfileHash($newProfileHash);
-		}
-
 		//run update, update reply
 		$profile->update($pdo);
 		$reply->message = "Profile updated ok!";
@@ -153,13 +116,9 @@ try {
 		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
-} catch(Exception $exception) {
+} catch(Exception | \TypeError $exception) {
 	$reply->status = $exception->getCode();
 	$reply->message = $exception->getMessage();
-	$reply->trace = $exception->getTraceAsString();
-} catch(TypeError $typeError) {
-	$reply->status = $typeError->getCode();
-	$reply->message = $typeError->getMessage();
 }
 
 //sets up the response header.
