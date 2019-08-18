@@ -1,11 +1,7 @@
 <?php
-require_once (dirname(__DIR__, 3) . "/vendor/autoload.php");
 require_once (dirname(__DIR__, 3) . "/Classes/autoload.php");
 require_once (dirname(__DIR__, 3) . "/lib/xsrf.php");
-require_once (dirname(__DIR__, 3) . "/lib/uuid.php");
 require_once ("/etc/apache2/capstone-mysql/encrypted-config.php");
-
-use Edu\Cnm\CreepyOctoMeow\Profile;
 
 /**
  * API for app sign out, Profile class
@@ -56,16 +52,14 @@ try {
 		throw (new \InvalidArgumentException("Invalid HTTP request!"));
 	}
 
-} catch(Exception $exception) {
+} catch(Exception | \TypeError $exception) {
 	$reply->status = $exception->getCode();
 	$reply->message = $exception->getMessage();
-} catch(TypeError $typeError) {
-	$reply->status = $typeError->getCode();
-	$reply->message = $typeError->getMessage();
 }
 
 //sets up the response header.
 header("Content-type: application/json");
+
 if($reply->data === null) {
 	unset($reply->data);
 }
