@@ -57,7 +57,7 @@ try {
 	//begin if blocks for the various HTTP requests
 	if($method === "GET") {
 
-		setXsrfCookie("/");
+		setXsrfCookie();
 
 		//grab profile based upon available input
 		if(empty($id) === false) {
