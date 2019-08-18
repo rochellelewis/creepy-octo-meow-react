@@ -61,21 +61,17 @@ try {
 
 		//grab profile based upon available input
 		if(empty($id) === false) {
-			$profile = Profile::getProfileByProfileId($pdo, $id);
-			$reply->data = $profile;
+			$reply->data = Profile::getProfileByProfileId($pdo, $id);
 
 		} elseif(empty($profileEmail) === false) {
-			$profile = Profile::getProfileByProfileEmail($pdo, $profileEmail);
-			$reply->data = $profile;
+			$reply->data = Profile::getProfileByProfileEmail($pdo, $profileEmail);
 
 		} elseif(empty($profileUsername) === false) {
-			$profile = Profile::getProfileByProfileUsername($pdo, $profileUsername);
-			$reply->data = $profile;
+			$reply->data = Profile::getProfileByProfileUsername($pdo, $profileUsername);
 
 		} else {
 			//who knows... we may want this!
-			$profiles = Profile::getAllProfiles($pdo)->toArray();
-			$reply->data = $profiles;
+			$reply->data = Profile::getAllProfiles($pdo)->toArray();
 		}
 
 	} elseif($method === "PUT") {
