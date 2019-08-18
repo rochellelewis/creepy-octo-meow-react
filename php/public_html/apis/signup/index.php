@@ -48,34 +48,34 @@ try {
 		$requestObject = json_decode($requestContent);
 
 		//check for all required fields
-		if(empty($requestObject->signupProfileEmail) === true) {
+		if(empty($requestObject->signupEmail) === true) {
 			throw (new \InvalidArgumentException("Y u no email?"));
 		}
 
-		if(empty($requestObject->signupProfileUsername) === true) {
+		if(empty($requestObject->signupUsername) === true) {
 			throw (new \InvalidArgumentException("Please choose a username."));
 		}
 
-		if(empty($requestObject->signupProfilePassword) === true) {
+		if(empty($requestObject->signupPassword) === true) {
 			throw (new \InvalidArgumentException("You must provide a password."));
 		}
 
-		if(empty($requestObject->signupProfileConfirmPassword) === true) {
-			throw (new \InvalidArgumentException("Please confirm your password."));
+		if(empty($requestObject->signupConfirmPassword) === true) {
+			throw (new \InvalidArgumentException("Now confirm your password..."));
 		}
 
-		if($requestObject->signupProfilePassword !== $requestObject->signupProfileConfirmPassword) {
+		if($requestObject->signupPassword !== $requestObject->signupConfirmPassword) {
 			throw (new \InvalidArgumentException("Passwords do not match."));
 		}
 
-		//check for duplicate email
-		$emailCheck = Profile::getProfileByProfileEmail($pdo, $requestObject->signupProfileEmail);
+		//check for duplicate email - email must be unique/not already in use
+		$emailCheck = Profile::getProfileByProfileEmail($pdo, $requestObject->signupEmail);
 		if(!empty($emailCheck) || $emailCheck !== null) {
-			throw new \InvalidArgumentException("This email is already in use.", 403);
+			throw new \InvalidArgumentException("This email is already signed up.", 403);
 		}
 
-		//check for duplicate username
-		$usernameCheck = Profile::getProfileByProfileUsername($pdo, $requestObject->signupProfileUsername);
+		//check for duplicate username - this must be unique/not already in use
+		$usernameCheck = Profile::getProfileByProfileUsername($pdo, $requestObject->signupUsername);
 		if(!empty($usernameCheck) || $usernameCheck !== null) {
 			throw new \InvalidArgumentException("This username is not available.", 403);
 		}
@@ -83,31 +83,33 @@ try {
 		//create profile activation token
 		$profileActivationToken = bin2hex(random_bytes(16));
 
-		//create password salt and hash
-		$salt = bin2hex(random_bytes(32));
-		$hash = hash_pbkdf2("sha512", $requestObject->signupProfilePassword, $salt, 262144);
+		//create new password hash for Profile
+		$hash = password_hash($requestObject->signupPassword, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 		//create a new Profile and insert into mysql
-		$profile = new Profile(generateUuidV4(), $profileActivationToken, $requestObject->signupProfileEmail, $hash, $salt, $requestObject->signupProfileUsername);
+		$profile = new Profile(generateUuidV4(), $profileActivationToken, $requestObject->signupProfileEmail, $hash, $requestObject->signupProfileUsername);
 		$profile->insert($pdo);
 
 		//build the account activation email link - this url points to the activation api
-		$basePath = dirname($_SERVER["SCRIPT_NAME"], 2);
-		$urlGlue = $basePath . "/activation/?token=" . $profileActivationToken;
+		//this is the link that will be clicked to confirm the account.
+		//make sure URL is /public_html/apis/activation/$activation
+		$basePath = dirname($_SERVER["SCRIPT_NAME"], 3);
+		$urlGlue = $basePath . "/apis/activation/?token=" . $profileActivationToken;
 		$confirmLink = "https://" . $_SERVER["SERVER_NAME"] . $urlGlue;
 
-		//build account activation email
+		//setup the account activation email fields
 		$senderName = "Creepy Octo Meow";
 		$senderEmail = "rlewis37@cnm.edu";
 		$recipientEmail = $profile->getProfileEmail();
 		$recipientName = $profile->getProfileUsername();
 		$subject = "Account Activation | Creepy Octo Meow";
 		$message = <<< EOF
-<h2>One more step to activate your account.</h2>
+<h1>Welcome to Creepy Octo Meow =^. .^=</h1>
+<h4>Just one more step to activate your account.</h4>
 <p>Visit the following link to complete the sign-up process: <a href="$confirmLink">$confirmLink<a></p>
 EOF;
 
-		//swiftmail it!
+		//build the email with Swiftmailer
 		$swiftMessage = new Swift_Message();
 		$swiftMessage->setFrom([$senderEmail => $senderName]);
 
@@ -120,6 +122,7 @@ EOF;
 		$swiftMessage->setSubject($subject);
 		$swiftMessage->setBody($message, "text/html");
 		$swiftMessage->addPart(html_entity_decode($message), "text/plain");
+
 		$smtp = new Swift_SmtpTransport("localhost", 25);
 		$mailer = new Swift_Mailer($smtp);
 		$numSent = $mailer->send($swiftMessage, $failedRecipients);
@@ -129,25 +132,20 @@ EOF;
 		}
 
 		//update reply after sending activation email
-		$reply->message = "Almost done! Check your email to activate your account.";
+		$reply->message = "Almost done! Check your email to activate your account. :D";
 
 	} else {
 		throw (new \InvalidArgumentException("Invalid HTTP request!"));
 	}
 
-} catch(Exception $exception) {
+} catch(Exception | \TypeError $exception) {
 	$reply->status = $exception->getCode();
 	$reply->message = $exception->getMessage();
-} catch(TypeError $typeError) {
-	$reply->status = $typeError->getCode();
-	$reply->message = $typeError->getMessage();
+	$reply->trace = $exception->getTraceAsString();
 }
 
 //sets up the response header.
 header("Content-type: application/json");
-if($reply->data === null) {
-	unset($reply->data);
-}
 
 //finally - JSON encode the $reply object and echo it back to the front end.
 echo json_encode($reply);
