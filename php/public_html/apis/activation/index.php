@@ -1,8 +1,6 @@
 <?php
 require_once(dirname(__DIR__, 3) . "/vendor/autoload.php");
 require_once(dirname(__DIR__, 3) . "/Classes/autoload.php");
-require_once(dirname(__DIR__, 3) . "/lib/xsrf.php");
-require_once(dirname(__DIR__, 3) . "/lib/uuid.php");
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
 
 use Edu\Cnm\CreepyOctoMeow\Profile;
@@ -39,11 +37,11 @@ try {
 	//determine which HTTP method, store the result in $method
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
-	//sanitize and store activation token
-	//make sure "id" is changed to "token" on line 5 in .htaccess
-	$token = filter_input(INPUT_GET, "token", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	//sanitize and store activation token - never trust the end user.
+	//check to make sure "id" is changed to "token" on line 5 in your .htaccess
+	$token = filter_input(INPUT_GET, "token", FILTER_SANITIZE_STRING);
 
-	//check that activation token is a valid hash
+	//check that activation token is a valid string of a hex
 	if(ctype_xdigit($token) === false) {
 		throw (new \InvalidArgumentException("Activation token is invalid.", 405));
 	}
@@ -60,40 +58,37 @@ try {
 		//grab the profile by activation token
 		$profile = Profile::getProfileByProfileActivationToken($pdo, $token);
 
-		if(empty($profile) === true) {
+		if($profile !== null) {
+
+			//make doubly sure the activation token matches
+			if($token === $profile->getProfileActivationToken()) {
+				//set the activation token to null
+				$profile->setProfileActivationToken(null);
+
+				//update profile
+				$profile->update($pdo);
+
+				//update reply
+				$reply->message = "Profile activated!";
+			}
+		} else {
 			throw (new \InvalidArgumentException("No profile found for this activation token. Have you already activated your account?", 404));
 		}
-
-		//set the activation token to null
-		$profile->setProfileActivationToken(null);
-
-		//update profile
-		$profile->update($pdo);
-
-		//update reply
-		$reply->message = "Profile activated!";
-
 	} else {
 		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
-} catch(Exception $exception) {
+} catch(Exception | \TypeError $exception) {
 	$reply->status = $exception->getCode();
 	$reply->message = $exception->getMessage();
-} catch(TypeError $typeError) {
-	$reply->status = $typeError->getCode();
-	$reply->message = $typeError->getMessage();
 }
 
-//sets up the response header.
-//header("Content-type: application/json");
 if($reply->data === null) {
 	unset($reply->data);
 }
-
 ?>
 
-<!-- BEGIN HTML FOR ACTIVATION PAGE -->
+<!-- BEGIN HTML FOR ACCOUNT ACTIVATION PAGE -->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
