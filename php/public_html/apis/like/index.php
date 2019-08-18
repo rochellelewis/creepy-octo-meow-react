@@ -45,7 +45,69 @@ try {
 
 	if($method === "GET") {
 
+		setXsrfCookie();
+
+		//grab like(s) based upon available input
+		if(empty($likePostId) === false && empty($likePostId) === false) {
+			$reply->data = Like::getLikeByLikePostIdAndLikeProfileId($pdo, $likePostId, $likeProfileId);
+
+		} elseif(empty($likePostId) === false) {
+			$reply->data = Like::getLikesByLikePostId($pdo, $likePostId);
+
+		} elseif(empty($likeProfileId) === false) {
+			$reply->data = Like::getLikesByLikeProfileId($pdo, $likeProfileId);
+
+		} else {
+			throw (new \InvalidArgumentException("Search parameters are invalid.", 404));
+		}
+
 	} elseif($method === "POST" || $method === "DELETE") {
+
+		//validate xsrf token and jwt header
+		verifyXsrf();
+		validateJwtHeader();
+
+		//check that the user is signed in
+		if(empty($_SESSION["profile"]) === true) {
+			throw(new \InvalidArgumentException("You are not logged in.", 403));
+		}
+
+		//decode the response from the front end
+		$requestContent = file_get_contents("php://input");
+		$requestObject = json_decode($requestContent);
+
+		if(empty($requestObject->likePostId) === true) {
+			throw (new \InvalidArgumentException("No post associated with the like.", 405));
+		}
+
+		if(empty($requestObject->likeProfileId) === true) {
+			throw (new \InvalidArgumentException("No profile associated with the like.", 405));
+		}
+
+		if($method === "POST") {
+
+			//create new Like and insert ino mysql
+			$like = new Like($requestObject->likePostId, $_SESSION["profile"]->getProfileId());
+			$like->insert($pdo);
+			$reply->message = "You liked this post!";
+
+		} elseif($method === "DELETE") {
+
+			//grab the like by composite key
+			$like = Like::getLikeByLikePostIdAndLikeProfileId($pdo, $requestObject->likePostId, $requestObject->likeProfileId);
+			if($like === null) {
+				throw (new RuntimeException("Like does not exist.", 404));
+			}
+
+			//enforce the user is signed in and only trying to delete their own like
+			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId() !== $like->getLikeProfileId()) {
+				throw(new \InvalidArgumentException("You are not allowed to unlike this!", 403));
+			}
+
+			//delete like and update message
+			$like->delete($pdo);
+			$reply->message = "You've successfully unliked this post.";
+		}
 
 	} else {
 		throw (new \InvalidArgumentException("Invalid HTTP request.", 405));
@@ -60,5 +122,6 @@ header("Content-type: application/json");
 if($reply->data === null) {
 	unset($reply->data);
 }
+
 // encode and return reply to front end caller
 echo json_encode($reply);
