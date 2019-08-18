@@ -9,7 +9,7 @@ require_once ("/etc/apache2/capstone-mysql/encrypted-config.php");
 use Edu\Cnm\CreepyOctoMeow\Profile;
 
 /**
- * API for app sign in, Profile class
+ * API for Creepy Octo Meow sign in, Profile class
  *
  * POST requests are supported.
  *
@@ -41,7 +41,7 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	if($method === "POST") {
-
+		//for testing purposes:
 		//var_dump($http_response_header);
 
 		//check xsrf token
@@ -52,17 +52,17 @@ try {
 		$requestObject = json_decode($requestContent);
 
 		//check for password (required field)
-		if(empty($requestObject->signinProfilePassword) === true) {
+		if(empty($requestObject->signinPassword) === true) {
 			throw (new \InvalidArgumentException("No password? U shall not pass!", 401));
 		} else {
-			$profilePassword = $requestObject->signinProfilePassword;
+			$profilePassword = $requestObject->signinPassword;
 		}
 
 		//check for email (required field)
-		if(empty($requestObject->signinProfileEmail) === true) {
+		if(empty($requestObject->signinEmail) === true) {
 			throw (new \InvalidArgumentException("Enter an email address.", 401));
 		} else {
-			$profileEmail = filter_var($requestObject->signinProfileEmail, FILTER_SANITIZE_EMAIL);
+			$profileEmail = filter_var($requestObject->signinEmail, FILTER_SANITIZE_EMAIL);
 		}
 
 		//grab the profile by email address
@@ -71,18 +71,15 @@ try {
 			throw (new \RuntimeException("Email or password is incorrect!", 401));
 		}
 
-		//hash the password given by user
-		$hash = hash_pbkdf2("sha512", $profilePassword, $profile->getProfileSalt(), 262144);
-
-		//check if the hash matches what's in mysql
-		if($hash !== $profile->getProfileHash()) {
-			throw (new \InvalidArgumentException("Email or password is incorrect!", 401));
+		//check the password the user gave us against the Profile
+		if(password_verify($requestObject->signinPassword, $profile->getProfileHash()) === false) {
+			throw(new \InvalidArgumentException("Your password or email is incorrect.", 401));
 		}
 
 		//grab profile by id from mysql and put into the session
 		$profile = Profile::getProfileByProfileId($pdo, $profile->getProfileId());
 
-		//check if user has activated their acct yet
+		//check if user has activated their acct yet - we're strict on this here (strictly optional!)
 		if(!empty($profile->getProfileActivationToken()) || $profile->getProfileActivationToken() !== null) {
 			throw (new \RuntimeException("Please check your email to activate your account before logging in.", 403));
 		}
@@ -103,7 +100,7 @@ try {
 		$reply->message = "Welcome! Sign in successful :D";
 
 	} else {
-		throw (new \InvalidArgumentException("Invalid HTTP request!"));
+		throw (new \InvalidArgumentException("Invalid HTTP request!", 418));
 	}
 
 } catch(\Exception | \TypeError $exception) {
