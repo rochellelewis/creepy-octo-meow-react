@@ -1,5 +1,5 @@
 import React from "react"
-
+/*TODO: check input id/name values against API*/
 export const Home = () => {
 	return (
 		<main className="d-flex align-items-end align-items-md-center mh-80">
