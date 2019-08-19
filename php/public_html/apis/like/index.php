@@ -48,14 +48,14 @@ try {
 		setXsrfCookie();
 
 		//grab like(s) based upon available input
-		if(empty($likePostId) === false && empty($likePostId) === false) {
+		if(empty($likePostId) === false && empty($likeProfileId) === false) {
 			$reply->data = Like::getLikeByLikePostIdAndLikeProfileId($pdo, $likePostId, $likeProfileId);
 
 		} elseif(empty($likePostId) === false) {
-			$reply->data = Like::getLikesByLikePostId($pdo, $likePostId);
+			$reply->data = Like::getLikesByLikePostId($pdo, $likePostId)->toArray();
 
 		} elseif(empty($likeProfileId) === false) {
-			$reply->data = Like::getLikesByLikeProfileId($pdo, $likeProfileId);
+			$reply->data = Like::getLikesByLikeProfileId($pdo, $likeProfileId)->toArray();
 
 		} else {
 			throw (new \InvalidArgumentException("Search parameters are invalid.", 404));
@@ -86,6 +86,12 @@ try {
 
 		if($method === "POST") {
 
+			//check if the like already exists
+			$likeCheck = Like::getLikeByLikePostIdAndLikeProfileId($pdo, $requestObject->likePostId, $_SESSION["profile"]->getProfileId());
+			if(!empty($likeCheck) || $likeCheck !== null) {
+				throw (new \InvalidArgumentException("You've already liked this post.", 403));
+			}
+
 			//create new Like and insert ino mysql
 			$like = new Like($requestObject->likePostId, $_SESSION["profile"]->getProfileId());
 			$like->insert($pdo);
@@ -100,7 +106,7 @@ try {
 			}
 
 			//enforce the user is signed in and only trying to delete their own like
-			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId() !== $like->getLikeProfileId()) {
+			if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $like->getLikeProfileId()->toString()) {
 				throw(new \InvalidArgumentException("You are not allowed to unlike this!", 403));
 			}
 
