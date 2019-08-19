@@ -51,16 +51,6 @@ try {
 	$postContent = filter_input(INPUT_GET, "postContent", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$postTitle = filter_input(INPUT_GET, "postTitle", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
-	//these dates are included here for date range searches
-	$postSunriseDate = filter_input(INPUT_GET, "postSunriseDate", FILTER_VALIDATE_INT);
-	$postSunsetDate = filter_input(INPUT_GET, "postSunsetDate", FILTER_VALIDATE_INT);
-
-	//if sunrise and sunset dates are available for date range search, format them
-	if(empty($postSunriseDate) === false && empty($postSunsetDate) === false) {
-		$postSunriseDate = \DateTime::createFromFormat("U", $postSunriseDate / 1000);
-		$postSunsetDate = \DateTime::createFromFormat("U", $postSunsetDate / 1000);
-	}
-
 	//check for valid post $id for PUT and DELETE requests!
 	if(($method === "PUT" || $method === "DELETE") && (empty($id) === true)) {
 		throw (new \InvalidArgumentException("Post id cannot be empty.", 405));
@@ -75,25 +65,22 @@ try {
 			$reply->data = Post::getPostByPostId($pdo, $id);
 
 		} elseif(empty($postProfileId) === false) {
-			$reply->data = Post::getPostsByPostProfileId($pdo, $postProfileId);
+			$reply->data = Post::getPostsByPostProfileId($pdo, $postProfileId)->toArray();
 
 		} elseif(empty($postContent) === false) {
-			$reply->data = Post::getPostsByPostContent($pdo, $postContent);
+			$reply->data = Post::getPostsByPostContent($pdo, $postContent)->toArray();
 
 		} elseif(empty($postTitle) === false) {
-			$reply->data = Post::getPostsByPostTitle($pdo, $postTitle);
-
-		} elseif(empty($postSunriseDate) === false && empty($postSunsetDate) === false) {
-			$reply->data = Post::getPostsByPostDateRange($pdo, $postSunriseDate, $postSunsetDate);
+			$reply->data = Post::getPostsByPostTitle($pdo, $postTitle)->toArray();
 
 		} else {
-			$reply->data = Post::getAllPosts($pdo);
+			$reply->data = Post::getAllPosts($pdo)->toArray();
 		}
 
 	//begin checks for PUT and POST requests...
 	} elseif($method === "PUT" || $method === "POST") {
 
-		//enforce the end user has a valid xsrf and JWT token
+		//enforce the end user has a valid xsrf and jwt
 		verifyXsrf();
 		validateJwtHeader();
 
@@ -138,8 +125,8 @@ try {
 			$post->setPostContent($requestObject->postContent);
 			$post->setPostTitle($requestObject->postTitle);
 
-			//update the post date on post update
-			$post->setPostDate(new \DateTime());
+			//Optional: update the post date on post update
+			//$post->setPostDate(new \DateTime());
 
 			//update the post
 			$post->update($pdo);
@@ -171,7 +158,7 @@ try {
 
 		//restrict access if user is not logged into the same account that created the post!
 		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $post->getPostProfileId()->toString()) {
-			throw (new \InvalidArgumentException("Hey now! U are not allowed to delete this post!", 403));
+			throw (new \InvalidArgumentException("Hey now! You know full well this isn't your post. U are not allowed to delete it.", 403));
 		}
 
 		//delete the post (╯°▽°)╯︵ ┻━┻
@@ -184,7 +171,7 @@ try {
 		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
-} catch(Exception | \TypeError $exception) {
+} catch(\Exception | \TypeError $exception) {
 	$reply->status = $exception->getCode();
 	$reply->message = $exception->getMessage();
 }
