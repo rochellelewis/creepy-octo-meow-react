@@ -66,7 +66,7 @@ try {
 		//grab the profile by email address
 		$profile = Profile::getProfileByProfileEmail($pdo, $profileEmail);
 		if(empty($profile) === true) {
-			throw (new \RuntimeException("Email or password is incorrect!", 401));
+			throw (new \RuntimeException("Your email or password is incorrect!", 401));
 		}
 
 		//check the password the user gave us against the Profile
@@ -78,7 +78,7 @@ try {
 		$profile = Profile::getProfileByProfileId($pdo, $profile->getProfileId());
 
 		//check if user has activated their acct yet - we're strict on this here (strictly optional!)
-		if(!empty($profile->getProfileActivationToken()) || $profile->getProfileActivationToken() !== null) {
+		if(empty($profile->getProfileActivationToken()) === false || $profile->getProfileActivationToken() !== null) {
 			throw (new \RuntimeException("Please check your email to activate your account before logging in.", 403));
 		}
 
