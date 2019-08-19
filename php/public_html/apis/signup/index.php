@@ -87,7 +87,7 @@ try {
 		$hash = password_hash($requestObject->signupPassword, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 		//create a new Profile and insert into mysql
-		$profile = new Profile(generateUuidV4(), $profileActivationToken, $requestObject->signupProfileEmail, $hash, $requestObject->signupProfileUsername);
+		$profile = new Profile(generateUuidV4(), $profileActivationToken, $requestObject->signupEmail, $hash, $requestObject->signupUsername);
 		$profile->insert($pdo);
 
 		//build the account activation email link - this url points to the activation api
