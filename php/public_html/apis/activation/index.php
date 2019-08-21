@@ -39,7 +39,7 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	//sanitize and store activation token - never trust the end user.
-	//check to make sure "id" is changed to "token" on line 5 in your .htaccess
+	//In this case... check to make sure "id" is changed to "token" on line 5 in the .htaccess
 	$token = filter_input(INPUT_GET, "token", FILTER_SANITIZE_STRING);
 
 	//check that activation token is a valid string of a hex
@@ -63,6 +63,7 @@ try {
 
 			//make doubly sure the activation token matches
 			if($token === $profile->getProfileActivationToken()) {
+
 				//set the activation token to null
 				$profile->setProfileActivationToken(null);
 
@@ -73,10 +74,10 @@ try {
 				$reply->message = "Profile activated!";
 			}
 		} else {
-			throw (new \InvalidArgumentException("No profile found for this activation token. Have you already activated your account?", 404));
+			throw (new \RuntimeException("No profile found for this activation token. Have you already activated your account?", 404));
 		}
 	} else {
-		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
+		throw (new \RuntimeException("Invalid HTTP request!", 405));
 	}
 
 } catch(Exception | \TypeError $exception) {
@@ -104,7 +105,7 @@ if($reply->data === null) {
 		<link type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
 				rel="stylesheet"/>
 
-		<!-- JSON encode the $reply object and console.log it -->
+		<!-- Optional: JSON encode the $reply object and console.log it -->
 		<script>
 			console.log(<?php echo json_encode($reply);?>);
 		</script>
