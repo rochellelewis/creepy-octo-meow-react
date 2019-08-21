@@ -14,6 +14,11 @@ use Edu\Cnm\CreepyOctoMeow\Profile;
  * @author Rochelle Lewis <rlewis37@cnm.edu>
  **/
 
+//check the session status. If it is not active, start the session.
+if(session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
+
 /**
  * Prepare an empty reply.
  *
@@ -26,11 +31,6 @@ $reply->status = 200;
 $reply->data = null;
 
 try {
-
-	//check the session status. If it is not active, start the session.
-	if(session_status() !== PHP_SESSION_ACTIVE) {
-		session_start();
-	}
 
 	//grab the database connection
 	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/rlewis37.ini");
