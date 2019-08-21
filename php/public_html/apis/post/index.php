@@ -156,9 +156,9 @@ try {
 			throw (new \RuntimeException("This post no exist!", 404));
 		}
 
-		//restrict access if user is not logged into the same account that created the post!
+		//restrict access if user is not logged in, or not logged into the same account that created the post!
 		if(empty($_SESSION["profile"]) === true || $_SESSION["profile"]->getProfileId()->toString() !== $post->getPostProfileId()->toString()) {
-			throw (new \InvalidArgumentException("Hey now! You know full well this isn't your post. U are not allowed to delete it.", 403));
+			throw (new \InvalidArgumentException("You are not authorized to delete this post!", 403));
 		}
 
 		//delete the post (╯°▽°)╯︵ ┻━┻
