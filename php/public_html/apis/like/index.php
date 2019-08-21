@@ -2,7 +2,6 @@
 require_once (dirname(__DIR__, 3) . "/vendor/autoload.php");
 require_once (dirname(__DIR__, 3) . "/Classes/autoload.php");
 require_once (dirname(__DIR__, 3) . "/lib/xsrf.php");
-require_once (dirname(__DIR__, 3) . "/lib/uuid.php");
 require_once (dirname(__DIR__, 3) . "/lib/jwt.php");
 require_once ("/etc/apache2/capstone-mysql/encrypted-config.php");
 
@@ -92,7 +91,7 @@ try {
 				throw (new \InvalidArgumentException("You've already liked this post.", 403));
 			}
 
-			//create new Like and insert ino mysql
+			//create new Like and insert ino mysql - using the profile id from the active session
 			$like = new Like($requestObject->likePostId, $_SESSION["profile"]->getProfileId());
 			$like->insert($pdo);
 			$reply->message = "You liked this post!";
