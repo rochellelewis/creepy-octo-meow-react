@@ -135,7 +135,7 @@ EOF;
 		$reply->message = "Almost done! Check your email to activate your account. :D";
 
 	} else {
-		throw (new \InvalidArgumentException("Invalid HTTP request!"));
+		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
 } catch(Exception | \TypeError $exception) {

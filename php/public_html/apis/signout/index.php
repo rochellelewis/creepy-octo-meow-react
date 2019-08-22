@@ -40,7 +40,7 @@ try {
 		$reply->message = "Goodbye!";
 
 	} else {
-		throw (new \InvalidArgumentException("Invalid HTTP request!"));
+		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
 } catch(Exception | \TypeError $exception) {
