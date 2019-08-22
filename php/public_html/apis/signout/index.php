@@ -33,11 +33,6 @@ try {
 
 	if($method === "GET") {
 
-		//if the session isn't active, they are already logged out
-		if(session_status() !== PHP_SESSION_ACTIVE) {
-			$reply->message = "You've already signed out.";
-		}
-
 		//empty out the session
 		$_SESSION = [];
 
