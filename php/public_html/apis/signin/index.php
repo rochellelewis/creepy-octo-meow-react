@@ -39,8 +39,6 @@ try {
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
 	if($method === "POST") {
-		//for testing purposes:
-		//var_dump($http_response_header);
 
 		//check xsrf token
 		verifyXsrf();
@@ -74,7 +72,7 @@ try {
 			throw(new \InvalidArgumentException("Your password or email is incorrect.", 401));
 		}
 
-		//grab profile by id from mysql and put into the session
+		//grab profile by id from mysql
 		$profile = Profile::getProfileByProfileId($pdo, $profile->getProfileId());
 
 		//check if user has activated their acct yet - we're strict on this here (strictly optional!)
@@ -98,7 +96,7 @@ try {
 		$reply->message = "Welcome! Sign in successful :D";
 
 	} else {
-		throw (new \InvalidArgumentException("Invalid HTTP request!", 418));
+		throw (new \InvalidArgumentException("Invalid HTTP request!", 405));
 	}
 
 } catch(\Exception | \TypeError $exception) {
