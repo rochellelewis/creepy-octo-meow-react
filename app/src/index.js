@@ -4,7 +4,6 @@ import {BrowserRouter} from "react-router-dom";
 import {Route, Switch} from "react-router";
 
 import 'bootstrap/dist/css/bootstrap.css';
-//import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import "./index.css";
 import {NavBar} from "./shared/components/NavBar";
@@ -14,17 +13,22 @@ import {About} from "./pages/about/About";
 import {Posts} from "./pages/posts/Posts";
 import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 
-import {library, icon} from "@fortawesome/fontawesome-svg-core";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {fab} from "@fortawesome/free-brands-svg-icons";
+import {far} from "@fortawesome/free-regular-svg-icons";
+import {fas} from "@fortawesome/free-solid-svg-icons";
 import {
 	faEnvelope,
 	faHeart,
 	faKey,
 	faPencilAlt,
+	faSignInAlt,
 	faSignOutAlt,
 	faTrash,
 	faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {faGithub} from "@fortawesome/free-brands-svg-icons";
+library.add(fab, far, fas, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
 
 const Routing = () => (
 	<>
