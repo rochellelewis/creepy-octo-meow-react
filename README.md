@@ -9,6 +9,8 @@ https://bootcamp-coders.cnm.edu/~rlewis37/creepy-octo-meow-react/
 2. add the following packages to package.json under **"dependencies"**
 ```
 "@fortawesome/fontawesome-svg-core": "^1.2.17",
+"@fortawesome/free-brands-svg-icons": "^5.10.2",
+"@fortawesome/free-regular-svg-icons": "^5.10.2",
 "@fortawesome/free-solid-svg-icons": "^5.8.1",
 "@fortawesome/react-fontawesome": "^0.1.4",
 "axios": "^0.18.0",
@@ -16,8 +18,8 @@ https://bootcamp-coders.cnm.edu/~rlewis37/creepy-octo-meow-react/
 "formik": "^1.5.4",
 "http-proxy-middleware": "^0.19.1",
 "react": "^16.9.0",
-"react-dom": "^16.9.0",
 "react-bootstrap": "^1.0.0-beta.10",
+"react-dom": "^16.9.0",
 "react-redux": "^7.1.0",
 "react-router": "^5.0.1",
 "react-router-bootstrap": "^0.25.0",
