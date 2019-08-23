@@ -62,29 +62,33 @@
 			</header>
 
 			<!-- BEGIN MAIN CONTENT -->
-			<main class="mt-5 py-5">
+			<main class="my-5 py-5">
 				<div class="container-fluid">
 					<div class="row">
 
 						<!--BEGIN FORM PANEL -->
-						<div class="col-md-3 position-fixed">
-							<form action="#" novalidate>
-								<div class="form-group">
-									<label for="" class="sr-only">Post Title</label>
-									<input type="text" class="form-control" placeholder="Title">
+						<div class="col-md-4 position-fixed">
+							<div class="card bg-light mb-3">
+								<div class="card-body">
+									<form action="#" novalidate>
+										<div class="form-group">
+											<label for="" class="sr-only">Post Title</label>
+											<input type="text" class="form-control" placeholder="Title">
+										</div>
+										<div class="form-group">
+											<label for="" class="sr-only">Post Content</label>
+											<textarea name="" id="" class="form-control">Your opinion here...</textarea>
+										</div>
+										<div class="form-group">
+											<button class="btn btn-primary" type="submit">Post!</button>
+										</div>
+									</form>
 								</div>
-								<div class="form-group">
-									<label for="" class="sr-only">Post Content</label>
-									<textarea name="" id="" class="form-control">Your opinion here...</textarea>
-								</div>
-								<div class="form-group">
-									<button class="btn btn-primary" type="submit">Post!</button>
-								</div>
-							</form>
+							</div>
 						</div>
 
 						<!-- BEGIN POSTS PANEL -->
-						<div class="col-md-8 offset-md-4">
+						<div class="posts-panel col-md-8 offset-md-4">
 							<!-- BEGIN POST ITEM -->
 							<div class="card mb-3">
 								<div class="card-header d-flex justify-content-end">
@@ -271,7 +275,7 @@
 			</main>
 		</div><!--/.sfooter-content-->
 
-		<footer class="page-footer text-muted py-4">
+		<footer class="page-footer bg-light text-muted py-4 fixed-bottom">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-sm-6 text-center text-sm-left small">
