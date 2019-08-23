@@ -1,48 +1,65 @@
 import React from "react"
+import {Link} from "react-router-dom";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/es/FormControl";
+import Button from "react-bootstrap/Button";
+
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 /*TODO: check input id/name values against API*/
 export const Home = () => {
 	return (
-		<main className="d-flex align-items-end align-items-md-center mh-80">
-			<div className="container-fluid text-center text-md-left">
+		<>
+			<main className="d-flex align-items-center mh-80">
+				<Container fluid="true">
+					<Row>
+						<div className="col-sm-6 col-lg-4 offset-lg-1">
+							<Card bg="transparent" className="border-0 rounded-0">
+								<Card.Body>
+									<Form>
 
-				<div className="row">
+										<Form.Group>
+											<InputGroup>
+												<InputGroup.Prepend>
+													<InputGroup.Text>
+														<FontAwesomeIcon icon="envelope"/>
+													</InputGroup.Text>
+												</InputGroup.Prepend>
+												<FormControl type="email" placeholder="Email"></FormControl>
+											</InputGroup>
+										</Form.Group>
 
-					<div className="col-md-6 offset-md-6 col-lg-4 offset-lg-8">
-						<div className="card bg-shadow-light border-0 rounded-0">
-							<div className="card-body">
-								<form action="#" noValidate>
-									<div className="form-group">
-										<div className="input-group">
-											<div className="input-group-addon"><i className="fa fa-envelope"></i></div>
-											<input id="signInEmail" name="signInEmail" type="email" className="form-control"
-													 placeholder="Email"></input>
+										<Form.Group>
+											<InputGroup>
+												<InputGroup.Prepend>
+													<InputGroup.Text>
+														<FontAwesomeIcon icon="key"/>
+													</InputGroup.Text>
+												</InputGroup.Prepend>
+												<FormControl type="password" placeholder="Password"/>
+											</InputGroup>
+										</Form.Group>
+
+										<div className="text-md-right">
+											<Button variant="primary" type="submit"><FontAwesomeIcon icon="sign-in-alt"/>&nbsp;Sign In</Button>
 										</div>
-									</div>
-									<div className="form-group">
-										<div className="input-group">
-											<div className="input-group-addon"><i className="fa fa-key"></i></div>
-											<input id="signInPassword" name="signInPassword" type="password"
-													 className="form-control" placeholder="Password"></input>
-										</div>
-									</div>
-									<div className="text-md-right">
-										<button className="btn btn-primary"><i className="fa fa-sign-in"></i>&nbsp;Sign In
-										</button>
-									</div>
-								</form>
-							</div>
-						</div>
+									</Form>
 
-						<div className="my-2 text-white">
-							<span className="font-weight-light font-italic">Don't have an account?</span>
-							<button className="btn-link py-0 text-white border-0 font-weight-bold" data-toggle="modal"
-									  data-target="#signUpModal">Sign up today!
-							</button>
+									<div className="my-2">
+										<span className="font-weight-light font-italic">Don't have an account? </span>
+										<Link to="/signup">Sign Up</Link>
+									</div>
+								</Card.Body>
+							</Card>
 						</div>
-					</div>
-
-				</div>
-			</div>
-		</main>
+					</Row>
+				</Container>
+			</main>
+		</>
 	)
 };
