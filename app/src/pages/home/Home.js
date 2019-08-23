@@ -11,7 +11,6 @@ import Button from "react-bootstrap/Button";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
-/*TODO: check input id/name values against API*/
 export const Home = () => {
 	return (
 		<>
@@ -46,16 +45,21 @@ export const Home = () => {
 										</Form.Group>
 
 										<div className="text-md-right">
-											<Button variant="primary" type="submit"><FontAwesomeIcon icon="sign-in-alt"/>&nbsp;Sign In</Button>
+											<Button variant="primary" type="submit">
+												<FontAwesomeIcon icon="sign-in-alt"/>&nbsp;Sign In
+											</Button>
 										</div>
+
 									</Form>
 
 									<div className="my-2">
-										<span className="font-weight-light font-italic">Don't have an account? </span>
+										<span className="font-weight-light font-italic">Don't have an account?&nbsp;</span>
 										<Link to="/signup">Sign Up</Link>
 									</div>
+
 								</Card.Body>
 							</Card>
+
 						</div>
 					</Row>
 				</Container>
