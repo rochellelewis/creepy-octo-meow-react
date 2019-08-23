@@ -67,10 +67,10 @@
 					<div class="row">
 
 						<!--BEGIN FORM PANEL -->
-						<div class="col-md-4 position-fixed">
+						<div class="posts-form-panel col-md-4 position-fixed">
 							<div class="card bg-light mb-3">
 								<div class="card-body">
-									<form action="#" novalidate>
+									<form id="posts-form" action="#" novalidate>
 										<div class="form-group">
 											<label for="" class="sr-only">Post Title</label>
 											<input type="text" class="form-control" placeholder="Title">

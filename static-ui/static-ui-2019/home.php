@@ -52,7 +52,7 @@
 									<a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Sign Out</a>
 								</div>
 							</li>
-							<span class="navbar-text">|</span>
+							<span class="navbar-text d-none d-lg-inline">|</span>
 							<li class="nav-item">
 								<a class="nav-link" href="#">Feed</a>
 							</li>
