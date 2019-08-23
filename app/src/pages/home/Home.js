@@ -30,7 +30,7 @@ export const Home = () => {
 														<FontAwesomeIcon icon="envelope"/>
 													</InputGroup.Text>
 												</InputGroup.Prepend>
-												<FormControl type="email" placeholder="Email"></FormControl>
+												<FormControl type="email" placeholder="Email"/>
 											</InputGroup>
 										</Form.Group>
 
