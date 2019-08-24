@@ -11,6 +11,7 @@ import {Footer} from "./shared/components/Footer";
 import {Home} from "./pages/home/Home";
 import {About} from "./pages/about/About";
 import {Posts} from "./pages/posts/Posts";
+import {Signup} from "./pages/signup/Signup";
 import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -19,6 +20,7 @@ import {fab, faGithub} from "@fortawesome/free-brands-svg-icons";
 import {
 	fas,
 	faCat,
+	faEllipsisH,
 	faEnvelope,
 	faHeart,
 	faKey,
@@ -28,7 +30,7 @@ import {
 	faTrash,
 	faUser
 } from "@fortawesome/free-solid-svg-icons";
-library.add(fab, far, fas, faCat, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
+library.add(fab, far, fas, faCat, faEllipsisH, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
 
 const Routing = () => (
 	<>
@@ -40,6 +42,7 @@ const Routing = () => (
 					<Route exact path="/" component={Home}/>
 					<Route exact path="/about" component={About}/>
 					<Route exact path="/posts" component={Posts}/>
+					<Route exact path="/signup" component={Signup}/>
 					<Route component={FourOhFour}/>
 				</Switch>
 			</div>
