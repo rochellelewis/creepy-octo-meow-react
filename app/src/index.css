@@ -25,7 +25,11 @@ button {
 }
 
 hr {
-	border-color: rgba(255,255,255,0.15);
+	border-color: rgba(0,0,0,0.15);
+}
+
+main {
+	margin-top: 10vh;
 }
 
 /* UTILS */
