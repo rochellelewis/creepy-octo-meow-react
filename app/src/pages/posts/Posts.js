@@ -1,123 +1,78 @@
 import React from "react";
 
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/es/FormControl";
+import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
+
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 export const Posts = () => {
 	return (
-		<main className="my-5">
-			<div className="container-fluid text-center text-lg-left">
-				<div className="row mb-3">
-					<div className="col">
-						<h1>Meow Forum</h1>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-12 col-lg-3">
-						<form>
-							<div className="form-group">
-								<input type="text" className="form-control" name="postTitle" id="postTitle" placeholder="Title"></input>
-							</div>
-							<div className="form-group">
-								<textarea name="postContent" id="postContent" className="form-control"  placeholder="2000 chars max" rows="10"></textarea>
-							</div>
-							<button type="submit" className="btn btn-block btn-warning mb-3">Submit</button>
-						</form>
-					</div>
-					<div className="col-12 col-lg-9">
-						<div className="card-columns">
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post title that wraps to a new line</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-								<button className="post-delete btn btn-sm btn-danger">x</button>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body blue-card">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
-							<div className="card">
-								<div className="card-body">
-									<h4 className="card-title">Post Title</h4>
-									<p className="card-text">This is a longer card with supporting text below as a natural
-										lead-in to additional content. This content is a little bit longer.</p>
-									<p className="card-text">
-										<small className="text-muted">Author Name | Date</small>
-									</p>
-								</div>
-							</div>
+		<>
+			<main className="my-5 py-5">
+				<Container fluid="true">
+					<Row>
+
+						{/*BEGIN FORM PANEL*/}
+						<div className="posts-form-panel col-md-4 position-fixed">
+							<Card bg="light" className="mb-3">
+								<Card.Body>
+									<Form>
+										<Form.Group>
+											<InputGroup>
+												<FormControl type="text" placeholder="Post Title"/>
+											</InputGroup>
+										</Form.Group>
+										<Form.Group>
+											<InputGroup>
+												<FormControl as="textarea" rows="5" placeholder="Your opinion here..."/>
+											</InputGroup>
+										</Form.Group>
+										<Form.Group>
+											<Button variant="primary">Post!</Button>
+										</Form.Group>
+									</Form>
+								</Card.Body>
+							</Card>
 						</div>
-					</div>
-				</div>
-			</div>
-		</main>
+
+						{/* BEGIN POSTS PANEL*/}
+						<div className="posts-panel col-md-8 offset-md-4">
+
+							{/* BEGIN POST ITEM */}
+							<Card className="mb-3">
+								<Card.Header>
+									<h3 className="panel-title my-0">Post Title</h3>
+								</Card.Header>
+								<Card.Body>
+									<div className="d-flex justify-content-end">
+										<div className="d-inline-block small text-muted mr-auto my-auto">Author | Datetime</div>
+										<Button variant="outline-secondary" size="sm" className="mr-2">
+											<FontAwesomeIcon icon="trash-alt"/>
+										</Button>
+										<Button variant="outline-secondary" size="sm" className="mr-2">
+											<FontAwesomeIcon icon="pencil-alt"/>
+										</Button>
+										<Button variant="outline-danger" size="sm">
+											<FontAwesomeIcon icon="heart"/>&nbsp;
+											<Badge variant="danger">99</Badge>
+										</Button>
+									</div>
+									<hr />
+									<Card.Text>Content Here</Card.Text>
+								</Card.Body>
+							</Card>
+
+						</div>
+
+					</Row>
+				</Container>
+			</main>
+		</>
 	)
 };

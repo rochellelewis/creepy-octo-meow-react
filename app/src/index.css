@@ -65,11 +65,11 @@ body { width: 100%;}
 }
 
 /* BODY */
-body {
+/*body {
 	background-color: #000;
 	position: relative;
 	background: url("shared/img/meow-app.jpg") no-repeat 40% center;
-}
+}*/
 
 /*body::after {
 	content: "";
@@ -128,6 +128,6 @@ button.post-delete {
 }
 
 /* FOOTER */
-footer.page-footer {
+/*footer.page-footer {
 	background: rgba(0,0,0,0.8);
-}
+}*/
