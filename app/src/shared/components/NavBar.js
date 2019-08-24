@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import NavLink from "react-bootstrap/NavLink";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 
@@ -31,11 +30,11 @@ export const NavBar = () => (
 							</NavDropdown.Item>
 						</NavDropdown>
 
-						<NavLink href="/posts">
+						<Link className="nav-link" to="/posts">
 							<Button variant="outline-dark" className="btn-block">
 								<FontAwesomeIcon icon="cat"/>&nbsp;Posts
 							</Button>
-						</NavLink>
+						</Link>
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
