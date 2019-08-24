@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 export const FourOhFour = () => {
 	return (
 		<>
-			<main className="py-5">
+			<main className="d-flex align-items-center py-5 mh-80">
 				<Container fluid="true">
 					<Row>
 						<Col>
