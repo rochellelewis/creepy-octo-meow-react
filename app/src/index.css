@@ -10,7 +10,6 @@ h1, .h1,
 h2, .h2,
 h3, .h3,
 h4, .h4,
-.modal-title,
 .navbar-brand {
 	font-family: 'Audiowide', sans-serif;
 }
@@ -34,7 +33,7 @@ main {
 
 /* UTILS */
 .mh-80 {
-	min-height: 80vh;
+	min-height: 85vh;
 }
 
 .bg-shadow-light {
@@ -86,11 +85,11 @@ body { width: 100%;}
 	z-index: -1;
 }*/
 
-@media only screen and (min-width: 768px) {
+/*@media only screen and (min-width: 768px) {
 	body::after {
 		background-position-x: center;
 	}
-}
+}*/
 
 /* HEADER */
 nav {
@@ -98,6 +97,10 @@ nav {
 }
 
 /* POSTS */
+.posts-form-panel {
+	z-index: 999;
+}
+
 button,
 .card,
 .modal-content {
@@ -105,22 +108,22 @@ button,
 	border: none;
 }
 
-.card {
+/*.card {
 	position: relative;
-}
+}*/
 
-button.post-delete {
+/*button.post-delete {
 	position: absolute;
 	top: 0;
 	right: 0;
 	z-index: 1;
-}
+}*/
 
-.card-title {
+/*.card-title {
 	color: #007bff;
-}
+}*/
 
-.blue-card {
+/*.blue-card {
 	background: #007bff;
 	color: #fff !important;
 	text-align: center !important;
@@ -129,7 +132,7 @@ button.post-delete {
 .blue-card .card-title,
 .blue-card .text-muted {
 	color: #fff !important;
-}
+}*/
 
 /* FOOTER */
 /*footer.page-footer {
