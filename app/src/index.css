@@ -14,10 +14,10 @@ h4, .h4,
 	font-family: 'Audiowide', sans-serif;
 }
 
-h1, .h1 {
+/*h1, .h1 {
 	color: #ffc107 !important;
 	font-size: 4rem;
-}
+}*/
 
 button {
 	cursor: pointer;
@@ -28,12 +28,16 @@ hr {
 }
 
 main {
-	margin-top: 10vh;
+	/*margin-top: 10vh;*/
 }
 
 /* UTILS */
 .mh-80 {
-	min-height: 85vh;
+	min-height: 80vh;
+}
+
+.mh-100 {
+	min-height: 100vh;
 }
 
 .bg-shadow-light {
@@ -101,6 +105,16 @@ nav {
 	z-index: 999;
 }
 
+.posts-panel {
+	margin-top: 60px;
+}
+
+@media only screen and (min-width: 768px){
+	.posts-panel {
+		margin-top: 0;
+	}
+}
+
 button,
 .card,
 .modal-content {
@@ -135,6 +149,6 @@ button,
 }*/
 
 /* FOOTER */
-/*footer.page-footer {
-	background: rgba(0,0,0,0.8);
-}*/
+footer.page-footer {
+
+}

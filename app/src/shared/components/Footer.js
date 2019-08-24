@@ -8,7 +8,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Footer = () => (
 	<>
-		<footer className="page-footer text-muted py-4">
+		<footer className="page-footer text-muted py-2 py-md-4">
 			<Container fluid="true">
 				<Row>
 					<div className="col-sm-6 text-center text-sm-left small">
