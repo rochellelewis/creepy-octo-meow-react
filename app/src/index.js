@@ -14,10 +14,11 @@ import {Posts} from "./pages/posts/Posts";
 import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {fab} from "@fortawesome/free-brands-svg-icons";
 import {far} from "@fortawesome/free-regular-svg-icons";
-import {fas} from "@fortawesome/free-solid-svg-icons";
+import {fab, faGithub} from "@fortawesome/free-brands-svg-icons";
 import {
+	fas,
+	faCat,
 	faEnvelope,
 	faHeart,
 	faKey,
@@ -27,8 +28,7 @@ import {
 	faTrash,
 	faUser
 } from "@fortawesome/free-solid-svg-icons";
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
-library.add(fab, far, fas, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
+library.add(fab, far, fas, faCat, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
 
 const Routing = () => (
 	<>
