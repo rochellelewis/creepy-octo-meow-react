@@ -2,6 +2,7 @@ import React from "react";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -19,7 +20,7 @@ export const Posts = () => {
 					<Row>
 
 						{/*BEGIN FORM PANEL*/}
-						<div className="posts-form-panel col-md-4 position-fixed">
+						<Col md={4} className="posts-form-panel position-fixed">
 							<Card bg="light" className="mb-3">
 								<Card.Body>
 									<Form>
@@ -39,11 +40,10 @@ export const Posts = () => {
 									</Form>
 								</Card.Body>
 							</Card>
-						</div>
+						</Col>
 
 						{/* BEGIN POSTS PANEL*/}
-						<div className="posts-panel col-md-8 offset-md-4">
-
+						<Col md={{span: 8, offset: 4}} className="posts-panel">
 							{/* BEGIN POST ITEM */}
 							<Card className="mb-3">
 								<Card.Header>
@@ -67,8 +67,7 @@ export const Posts = () => {
 									<Card.Text>Content Here</Card.Text>
 								</Card.Body>
 							</Card>
-
-						</div>
+						</Col>
 
 					</Row>
 				</Container>

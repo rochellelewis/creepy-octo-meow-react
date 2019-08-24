@@ -2,6 +2,7 @@ import React from "react"
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -16,7 +17,7 @@ export const Signup = () => {
 			<main className="d-flex align-items-center mh-80">
 				<Container fluid="true">
 					<Row>
-						<div className="col-sm-6 col-lg-4 offset-lg-1">
+						<Col sm={6} lg={{span: 4, offset: 1}}>
 							<Card bg="transparent" className="border-0 rounded-0">
 								<Card.Body>
 									<Form>
@@ -74,8 +75,7 @@ export const Signup = () => {
 									</Form>
 								</Card.Body>
 							</Card>
-
-						</div>
+						</Col>
 					</Row>
 				</Container>
 			</main>
