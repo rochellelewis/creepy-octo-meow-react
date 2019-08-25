@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom'
 import {BrowserRouter} from "react-router-dom";
 import {Route, Switch} from "react-router";
 
+import thunk from "redux-thunk";
+import {applyMiddleware, createStore} from "redux";
+import reducers from "./shared/reducers";
+import {Provider} from "react-redux";
+
 import 'bootstrap/dist/css/bootstrap.css';
 
 import "./index.css";
@@ -32,9 +37,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 library.add(fab, far, fas, faCat, faEllipsisH, faEnvelope, faHeart, faGithub, faKey, faPencilAlt, faSignInAlt, faSignOutAlt, faTrash, faUser);
 
-const Routing = () => (
-	<>
+const store = createStore(reducers,applyMiddleware(thunk));
 
+const Routing = (store) => (
+	<>
+	<Provider store={store}>
 		<BrowserRouter>
 			<div className="sfooter-content">
 				<NavBar/>
@@ -48,8 +55,10 @@ const Routing = () => (
 			</div>
 			<Footer/>
 		</BrowserRouter>
+	</Provider>
 
 	</>
 );
 
-ReactDOM.render(<Routing/>, document.querySelector('#root'));
+ReactDOM.render(Routing(store) , document.querySelector("#root"));
+//ReactDOM.render(<Routing/>, document.querySelector('#root'));

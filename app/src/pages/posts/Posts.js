@@ -1,7 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
 
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
+
+import {getAllPosts} from "../../shared/actions/get-all-posts";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -12,6 +15,29 @@ import Accordion from "react-bootstrap/Accordion";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Posts = () => {
+
+	// Returns the posts store from redux and assigns it to the posts variable.
+	const posts = useSelector(state => state.posts ? state.posts : []);
+
+	// assigns useDispatch reference to the dispatch variable for later use.
+	const dispatch = useDispatch();
+
+	// Define the side effects that will occur in the application.
+	// E.G code that handles dispatches to redux, API requests, or timers.
+	const effects = () => {
+		// The dispatch function takes actions as arguments to make changes to the store/redux.
+		dispatch(getAllPosts())
+	};
+
+	// Declare any inputs that will be used by functions that are declared in sideEffects.
+	const inputs = [];
+
+	/**
+	 * Pass both sideEffects and sideEffectInputs to useEffect.
+	 * useEffect is what handles rerendering of components when sideEffects resolve.
+	 * E.g when a network request to an api has completed and there is new data to display on the dom.
+	 **/
+	useEffect(effects, inputs);
 
 	return (
 		<>
@@ -40,7 +66,9 @@ export const Posts = () => {
 
 						{/* BEGIN POST ITEMS */}
 						<Col md={{span: 8, offset: 4}} className="posts-panel">
-							<PostCard/>
+							{
+								posts.map(post => <PostCard post={post} key={post.id}/>)
+							}
 						</Col>
 
 					</Row>
