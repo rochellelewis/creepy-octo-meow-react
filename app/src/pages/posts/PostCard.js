@@ -16,7 +16,18 @@ export const PostCard = ({posts}) => {
 					</Card.Header>
 					<Card.Body>
 						<div className="d-flex justify-content-end">
-							<div className="d-inline-block small text-muted mr-auto my-auto">{post.postProfileId} | {post.postDate}</div>
+							<div className="d-inline-block small text-muted mr-auto my-auto">
+								{post.postProfileId}&nbsp;|&nbsp;
+								{new Intl.DateTimeFormat('en-US', {
+									year: '2-digit',
+									month: 'numeric',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric',
+									second: '2-digit',
+									timeZoneName: 'short'
+								}).format(post.postDate)}
+							</div>
 							<Button variant="outline-secondary" size="sm" className="mr-2">
 								<FontAwesomeIcon icon="trash-alt"/>
 							</Button>
