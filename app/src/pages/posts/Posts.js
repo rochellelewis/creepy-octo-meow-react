@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
-import {getAllPosts} from "../../shared/actions/get-all-posts";
+import {getAllPosts} from "../../shared/actions/get-posts";
 import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
 
 import Container from "react-bootstrap/Container";
