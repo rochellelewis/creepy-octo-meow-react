@@ -4,8 +4,8 @@ import {useSelector, useDispatch} from "react-redux";
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
-import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
 import {getAllPosts} from "../../shared/actions/get-all-posts";
+import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -24,13 +24,12 @@ export const Posts = () => {
 	const width = UseWindowWidth();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
-	const posts = useSelector(state => state.posts ? state.posts : []);
+	const posts = useSelector(state => state.posts);
 
 	// assigns useDispatch reference to the dispatch variable for later use.
 	const dispatch = useDispatch();
 
-	// Define the side effects that will occur in the application.
-	// E.G code that handles dispatches to redux, API requests, or timers.
+	// Define the side effects that will occur in the application, e.g., code that handles dispatches to redux, API requests, or timers.
 	const effects = () => {
 		// The dispatch function takes actions as arguments to make changes to the store/redux.
 		dispatch(getAllPosts())
@@ -41,7 +40,7 @@ export const Posts = () => {
 
 	/**
 	 * Pass both sideEffects and sideEffectInputs to useEffect.
-	 * useEffect is what handles rerendering of components when sideEffects resolve.
+	 * useEffect is what handles re-rendering of components when sideEffects resolve.
 	 * E.g when a network request to an api has completed and there is new data to display on the dom.
 	 **/
 	useEffect(effects, inputs);
@@ -75,9 +74,7 @@ export const Posts = () => {
 
 						{/* BEGIN POST ITEMS */}
 						<Col md={{span: 8, offset: 4}} className="posts-panel">
-							{
-								posts.map(post => <PostCard post={post} key={post.id}/>)
-							}
+							<PostCard posts={posts} />
 						</Col>
 
 					</Row>
