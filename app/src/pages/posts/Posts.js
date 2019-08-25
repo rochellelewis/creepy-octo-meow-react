@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
