@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
+import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
 import {getAllPosts} from "../../shared/actions/get-all-posts";
 
 import Container from "react-bootstrap/Container";
@@ -15,6 +16,12 @@ import Accordion from "react-bootstrap/Accordion";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Posts = () => {
+
+	/*
+	* const width holds the value of the screen width on the resize event.
+	* See: UseWindowWidth
+	* */
+	const width = UseWindowWidth();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
 	const posts = useSelector(state => state.posts ? state.posts : []);
@@ -48,8 +55,10 @@ export const Posts = () => {
 						{/*BEGIN FORM PANEL*/}
 						<Col md={4} className="posts-form-panel position-fixed">
 
-							{/* TODO: update this dirty non-responsive solution someday */}
-							{window.innerWidth < 768 ? (
+							{/* This ternary will render the PostForm in either
+							one of two different ways depending on the screen width.
+							This allows the rendering of this element to be responsive. */}
+							{width < 768 ? (
 								<Accordion defaultActiveKey="1" className="d-md-none">
 									<Accordion.Toggle as={Button} variant="primary" eventKey="0" className="btn-block">
 										<FontAwesomeIcon icon="pencil-alt"/>&nbsp;Write A Post
