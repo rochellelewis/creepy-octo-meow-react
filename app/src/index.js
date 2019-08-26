@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import {BrowserRouter} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 import {Route, Switch} from "react-router";
 
 import thunk from "redux-thunk";
@@ -42,7 +42,7 @@ const store = createStore(reducers,applyMiddleware(thunk));
 const Routing = (store) => (
 	<>
 	<Provider store={store}>
-		<BrowserRouter>
+		<HashRouter>
 			<div className="sfooter-content">
 				<NavBar/>
 				<Switch>
@@ -54,11 +54,10 @@ const Routing = (store) => (
 				</Switch>
 			</div>
 			<Footer/>
-		</BrowserRouter>
+		</HashRouter>
 	</Provider>
 
 	</>
 );
 
 ReactDOM.render(Routing(store) , document.querySelector("#root"));
-//ReactDOM.render(<Routing/>, document.querySelector('#root'));
