@@ -24,14 +24,14 @@ export const Posts = () => {
 	const width = UseWindowWidth();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
-	const posts = useSelector(state => state.posts);
+	const posts = useSelector(state => (state.posts ? state.posts : []));
 
 	// assigns useDispatch reference to the dispatch variable for later use.
 	const dispatch = useDispatch();
 
 	// Define the side effects that will occur in the application, e.g., code that handles dispatches to redux, API requests, or timers.
+	// The dispatch function takes actions as arguments to make changes to the store/redux.
 	const effects = () => {
-		// The dispatch function takes actions as arguments to make changes to the store/redux.
 		dispatch(getAllPosts())
 	};
 
@@ -74,7 +74,9 @@ export const Posts = () => {
 
 						{/* BEGIN POST ITEMS */}
 						<Col md={{span: 8, offset: 4}} className="posts-panel">
-							<PostCard posts={posts} />
+							{posts.map(post =>
+								<PostCard post={post} key={post.postId} />
+							)}
 						</Col>
 
 					</Row>
