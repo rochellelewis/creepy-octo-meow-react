@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
-import {getAllPosts} from "../../shared/actions/get-posts";
+import {getAllPosts, getPostsAndUsers} from "../../shared/actions/get-post";
 import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
 
 import Container from "react-bootstrap/Container";
@@ -12,7 +12,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
-
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const Posts = () => {
@@ -32,7 +31,7 @@ export const Posts = () => {
 	// Define the side effects that will occur in the application, e.g., code that handles dispatches to redux, API requests, or timers.
 	// The dispatch function takes actions as arguments to make changes to the store/redux.
 	const effects = () => {
-		dispatch(getAllPosts())
+		dispatch(getPostsAndUsers());
 	};
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.

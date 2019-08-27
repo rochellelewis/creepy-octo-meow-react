@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+
+import {GetUsername} from "./GetUsername";
+import {getProfileByProfileId} from "../../shared/actions/get-profile";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -29,6 +32,7 @@ export const PostCard = ({post}) => {
 					<div className="d-flex justify-content-end">
 						<div className="d-inline-block small text-muted mr-auto my-auto">
 							{post.postProfileId}&nbsp;|&nbsp;
+							<GetUsername profileId={post.postProfileId} />
 							{formatDate.format(post.postDate)}
 						</div>
 						<Button variant="outline-secondary" size="sm" className="mr-2">

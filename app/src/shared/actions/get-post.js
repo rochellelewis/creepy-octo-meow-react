@@ -10,7 +10,7 @@ export const getAllPosts = () => async dispatch => {
 export const getPostsAndUsers = () => async (dispatch, getState) => {
 	await dispatch(getAllPosts());
 
-	const profileIds = _.uniq(_.map(getState().posts, "profileId"));
+	const profileIds = _.uniq(_.map(getState().posts, "postProfileId"));
 	profileIds.forEach(id => dispatch(getProfileByProfileId(id)));
 
 	//commented out lines below are equivalent to the _ chain method
