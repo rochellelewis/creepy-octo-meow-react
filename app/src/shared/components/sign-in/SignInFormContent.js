@@ -23,7 +23,6 @@ export const SignInFormContent = (props) => {
 		handleBlur,
 		handleSubmit,
 		handleReset,
-		submitStatus
 	} = props;
 
 	return (
@@ -84,11 +83,11 @@ export const SignInFormContent = (props) => {
 							}
 						</Form.Group>
 
-						<div className="text-md-right">
+						<Form.Group className="text-md-right">
 							<Button variant="primary" type="submit">
 								<FontAwesomeIcon icon="sign-in-alt"/>&nbsp;Sign In
 							</Button>
-						</div>
+						</Form.Group>
 
 						{/*for testing purposes only*/}
 						{/*<FormDebugger {...props}/>*/}
@@ -103,8 +102,8 @@ export const SignInFormContent = (props) => {
 				</Card.Body>
 			</Card>
 
-			{console.log(submitStatus)}
-			{submitStatus && (<div className={submitStatus.type}>{submitStatus.message}</div>)}
+			{console.log(status)}
+			{status && (<div className={status.type}>{status.message}</div>)}
 		</>
 	);
 };
