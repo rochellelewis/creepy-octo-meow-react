@@ -16,6 +16,7 @@ import {Footer} from "./shared/components/Footer";
 import {Home} from "./pages/home/Home";
 import {About} from "./pages/about/About";
 import {Posts} from "./pages/posts/Posts";
+import {Profile} from "./pages/profile/Profile";
 import {Signup} from "./pages/signup/Signup";
 import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 
@@ -49,6 +50,7 @@ const Routing = (store) => (
 					<Route exact path="/" component={Home}/>
 					<Route exact path="/about" component={About}/>
 					<Route exact path="/posts" component={Posts}/>
+					<Route exact path="/profile" component={Profile}/>
 					<Route exact path="/signup" component={Signup}/>
 					<Route component={FourOhFour}/>
 				</Switch>
