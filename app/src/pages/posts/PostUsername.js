@@ -1,7 +1,7 @@
 import React from 'react';
 import {useSelector} from "react-redux";
 
-export const GetUsername = ({profileId}) => {
+export const PostUsername = ({profileId}) => {
 
 	const profile = useSelector((state) => {
 		//console.log(state);

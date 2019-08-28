@@ -1,6 +1,6 @@
 import React from "react";
 
-import {GetUsername} from "./GetUsername";
+import {PostUsername} from "./PostUsername";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -31,7 +31,7 @@ export const PostCard = ({post}) => {
 						<div className="d-inline-block small text-muted mr-auto my-auto">
 							<h6 className="d-sm-inline-block">
 								<Badge className="p-1 mr-2" variant="secondary">By:&nbsp;
-									<GetUsername profileId={post.postProfileId} />
+									<PostUsername profileId={post.postProfileId} />
 								</Badge>
 							</h6>
 							{formatDate.format(post.postDate)}
