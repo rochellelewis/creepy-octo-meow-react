@@ -100,6 +100,11 @@ nav {
 	border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+div.dropdown-item.sign-out-dropdown:active,
+div.dropdown-item.sign-out-dropdown:hover {
+	background-color: transparent;
+}
+
 /* POSTS */
 .posts-form-panel {
 	z-index: 999;

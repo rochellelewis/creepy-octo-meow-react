@@ -31,11 +31,11 @@ export const NavBar = () => {
 									<FontAwesomeIcon icon="user" />&nbsp; Profile
 								</NavDropdown.Item>
 								<div className="dropdown-divider"></div>
-								<Form className="dropdown-item">
-									<Button variant="outline-dark" type="submit" onClick={signOut()}>
+								<div className="dropdown-item sign-out-dropdown">
+									<button className="btn btn-outline-dark" onClick={signOut}>
 										Sign Out&nbsp;<FontAwesomeIcon icon="sign-out-alt" />
-									</Button>
-								</Form>
+									</button>
+								</div>
 							</NavDropdown>
 
 							<Link className="nav-link" to="/posts">
