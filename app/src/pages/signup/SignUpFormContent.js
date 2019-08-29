@@ -11,7 +11,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 export const SignUpFormContent = (props) => {
 
 	const {
-		submitStatus,
 		status,
 		values,
 		errors,
