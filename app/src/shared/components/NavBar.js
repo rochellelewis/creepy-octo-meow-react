@@ -34,20 +34,24 @@ export const NavBar = () => {
 					</Link>
 					<Navbar.Text className="small font-italic d-none d-md-inline-block">A DDC React Demo.</Navbar.Text>
 					<Navbar.Toggle aria-controls="basic-navbar-nav"></Navbar.Toggle>
+
 					<Navbar.Collapse>
 						<Nav className="ml-auto">
 
-							<NavDropdown className="nav-link" title={"Welcome, --username--- !"}>
-								<NavDropdown.Item href="/profile">
-									<FontAwesomeIcon icon="user" />&nbsp; Profile
-								</NavDropdown.Item>
-								<div className="dropdown-divider"></div>
-								<div className="dropdown-item sign-out-dropdown">
-									<button className="btn btn-outline-dark" onClick={signOut}>
-										Sign Out&nbsp;<FontAwesomeIcon icon="sign-out-alt" />
-									</button>
-								</div>
-							</NavDropdown>
+							{/* conditional render if user has jwt/logged in */}
+							{window.localStorage.getItem("jwt-token") !== null && (
+								<NavDropdown className="nav-link" title={"Welcome, --username--- !"}>
+									<NavDropdown.Item href="/profile">
+										<FontAwesomeIcon icon="user" />&nbsp; Profile
+									</NavDropdown.Item>
+									<div className="dropdown-divider"></div>
+									<div className="dropdown-item sign-out-dropdown">
+										<button className="btn btn-outline-dark" onClick={signOut}>
+											Sign Out&nbsp;<FontAwesomeIcon icon="sign-out-alt" />
+										</button>
+									</div>
+								</NavDropdown>
+							)}
 
 							<Link className="nav-link" to="/posts">
 								<Button variant="outline-dark" className="btn-block">
