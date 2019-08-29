@@ -1,33 +1,56 @@
-import React from "react";
+import React, {useState} from "react";
+import {httpConfig} from "../../shared/misc/http-config";
+import * as Yup from "yup";
+import {Formik} from "formik";
 
-import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/es/FormControl";
-import Button from "react-bootstrap/Button";
+import {PostFormContent} from "./PostFormContent";
 
 export const PostForm = () => {
+
+	const [status, setStatus] = useState(null);
+
+	const post = {
+		postTitle: "",
+		postContent: ""
+	};
+
+	const validator = Yup.object().shape({
+		postTitle: Yup.string()
+			.required("A title is required.")
+			.max(64, "No titles longer than 64 characters."),
+		postContent: Yup.string()
+			.required("U gonna post something?")
+			.max(2000, "2000 characters max per meow.")
+	});
+
+	const submitPost = (values, {resetForm, setStatus}) => {
+		// grab jwt token to pass in headers on post request
+		const headers = {
+			'X-JWT-TOKEN': window.localStorage.getItem("jwt-token")
+		};
+
+		httpConfig.post("/apis/post/", values, {
+			headers: headers})
+			.then(reply => {
+				let {message, type} = reply;
+				setStatus({message, type});
+				if(reply.status === 200) {
+					resetForm();
+					/*TODO: find a better way to re-render the post component!*/
+					window.location.reload();
+				}
+			});
+	};
+
 	return (
 		<>
-			<Card bg="light" className="mb-3">
-				<Card.Body>
-					<Form>
-						<Form.Group>
-							<InputGroup>
-								<FormControl type="text" placeholder="Post Title"/>
-							</InputGroup>
-						</Form.Group>
-						<Form.Group>
-							<InputGroup>
-								<FormControl as="textarea" rows="5" placeholder="Your opinion here..."/>
-							</InputGroup>
-						</Form.Group>
-						<Form.Group>
-							<Button variant="primary">Post!</Button>
-						</Form.Group>
-					</Form>
-				</Card.Body>
-			</Card>
+			<Formik
+				initialValues={post}
+				onSubmit={submitPost}
+				validationSchema={validator}
+			>
+				{PostFormContent}
+			</Formik>
 		</>
 	)
 };
