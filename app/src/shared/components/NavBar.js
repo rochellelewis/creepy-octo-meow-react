@@ -1,17 +1,28 @@
 import React from "react";
+import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const NavBar = () => {
 
 	const signOut = () => {
-		console.log("create signout :P");
+		httpConfig.get("/apis/signout/")
+			.then(reply => {
+				let {message, type} = reply;
+				if(reply.status === 200) {
+					window.localStorage.removeItem("jwt-token");
+					alert(reply.message);
+					console.log(reply);
+					setTimeout(() => {
+						window.location = "/";
+					}, 1500);
+				}
+			});
 	};
 
 	return (
