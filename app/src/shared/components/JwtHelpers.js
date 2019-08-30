@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import * as jwtDecode from "jwt-decode";
 
 /*
-* Custom hooks to grab the jwt and decoded jwt data of a logged in user.
+* Custom hooks to grab the jwt and decode jwt data for logged in users.
 *
 * Author: rlewis37@cnm.edu
 * */
@@ -28,4 +28,17 @@ export const UseJwtUsername = (token) => {
 	});
 
 	return username;
+};
+
+export const UseJwtProfileId = (token) => {
+	const [profileId, setProfileId] = useState(null);
+
+	useEffect(() => {
+		if(token !== null) {
+			let decodedJwt = jwtDecode(window.localStorage.getItem("jwt-token"));
+			setProfileId(decodedJwt.auth.profileId);
+		}
+	});
+
+	return profileId;
 };
