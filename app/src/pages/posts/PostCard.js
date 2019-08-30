@@ -1,14 +1,17 @@
 import React from "react";
 
 import {PostUsername} from "./PostUsername";
+import {UseJwt} from "../../shared/components/JwtHelpers";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
-
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const PostCard = ({post}) => {
+
+	// grab jwt of logged in users
+	const jwt = UseJwt();
 
 	const formatDate = new Intl.DateTimeFormat('en-US', {
 		day: 'numeric',
@@ -36,16 +39,22 @@ export const PostCard = ({post}) => {
 							</h6>
 							{formatDate.format(post.postDate)}
 						</div>
-						<Button variant="outline-secondary" size="sm" className="mr-2">
-							<FontAwesomeIcon icon="trash-alt"/>
-						</Button>
-						<Button variant="outline-secondary" size="sm" className="mr-2">
-							<FontAwesomeIcon icon="pencil-alt"/>
-						</Button>
-						<Button variant="outline-danger" size="sm">
-							<FontAwesomeIcon icon="heart"/>&nbsp;
-							<Badge variant="danger">99</Badge>
-						</Button>
+
+						{/* conditional render post del, edit, like buttons if logged in */}
+						{(jwt !== null) && (
+							<>
+								<Button variant="outline-secondary" size="sm" className="mr-2">
+									<FontAwesomeIcon icon="trash-alt"/>
+								</Button>
+								<Button variant="outline-secondary" size="sm" className="mr-2">
+									<FontAwesomeIcon icon="pencil-alt"/>
+								</Button>
+								<Button variant="outline-danger" size="sm">
+									<FontAwesomeIcon icon="heart"/>&nbsp;
+									<Badge variant="danger">99</Badge>
+								</Button>
+							</>
+						)}
 					</div>
 					<hr />
 					<Card.Text>{post.postContent}</Card.Text>

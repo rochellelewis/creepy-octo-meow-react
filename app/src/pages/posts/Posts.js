@@ -7,6 +7,7 @@ import {PostCard} from "./PostCard";
 
 import {getPostsAndUsers} from "../../shared/actions/get-post";
 import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
+import {UseJwt} from "../../shared/components/JwtHelpers";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -23,6 +24,9 @@ export const Posts = () => {
 	* See: UseWindowWidth
 	* */
 	const width = UseWindowWidth();
+
+	// grab jwt for logged in users
+	const jwt = UseJwt();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
 	const posts = useSelector(state => (state.posts ? state.posts : []));
@@ -59,7 +63,7 @@ export const Posts = () => {
 							otherwise show signin/signup links. Then render the post form in either
 							one of two different ways depending on the screen width.
 							This allows the rendering of this element to be responsive. */}
-							{window.localStorage.getItem("jwt-token") !== null ? (
+							{jwt !== null ? (
 								width < 768 ? (
 									<Accordion defaultActiveKey="1" className="d-md-none">
 										<Accordion.Toggle as={Button} variant="primary" eventKey="0" className="btn-block">
