@@ -1,6 +1,7 @@
 import React from "react";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
+import {DecodeJwtUsername} from "./DecodeJwtUsername";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -9,6 +10,8 @@ import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const NavBar = () => {
+
+	const username = DecodeJwtUsername();
 
 	const signOut = () => {
 		httpConfig.get("/apis/signout/")
@@ -38,11 +41,11 @@ export const NavBar = () => {
 					<Navbar.Collapse>
 						<Nav className="ml-auto">
 
-							{/* conditional render if user has jwt/logged in */}
+							{/* conditional render if user has jwt / is logged in */}
 							{window.localStorage.getItem("jwt-token") !== null && (
-								<NavDropdown className="nav-link" title={"Welcome, --username--- !"}>
+								<NavDropdown className="nav-link navbar-username" title={"Welcome, " + username + "!"}>
 									<NavDropdown.Item href="/profile">
-										<FontAwesomeIcon icon="user" />&nbsp; Profile
+										<FontAwesomeIcon icon="user" />&nbsp; My Profile
 									</NavDropdown.Item>
 									<div className="dropdown-divider"></div>
 									<div className="dropdown-item sign-out-dropdown">
