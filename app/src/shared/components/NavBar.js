@@ -46,13 +46,15 @@ export const NavBar = () => {
 							{/* conditional render if user has jwt / is logged in */}
 							{jwt !== null && (
 								<NavDropdown className="nav-link navbar-username" title={"Welcome, " + username + "!"}>
-									<NavDropdown.Item href="/profile">
-										<FontAwesomeIcon icon="user" />&nbsp; My Profile
-									</NavDropdown.Item>
+									<div className="dropdown-item">
+										<Link to="/profile" className="nav-link">
+											<FontAwesomeIcon icon="user" />&nbsp;&nbsp;My Profile
+										</Link>
+									</div>
 									<div className="dropdown-divider"></div>
 									<div className="dropdown-item sign-out-dropdown">
 										<button className="btn btn-outline-dark" onClick={signOut}>
-											Sign Out&nbsp;<FontAwesomeIcon icon="sign-out-alt" />
+											Sign Out&nbsp;&nbsp;<FontAwesomeIcon icon="sign-out-alt" />
 										</button>
 									</div>
 								</NavDropdown>
