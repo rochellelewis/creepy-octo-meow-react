@@ -10,30 +10,30 @@ export const PostLike = ({postId}) => {
 
 	// grab jwt and profile id
 	const jwt = UseJwt();
-	const profileId = UseJwtProfileId(jwt);
+	const profileId = UseJwtProfileId();
 
 	const [status, setStatus] = useState(null);
-	const [isLiked, setIsLiked] = useState(false);
+	const [isLiked, setIsLiked] = useState("");
 
-	const handleLike = () => {
-		let like = !isLiked ? setIsLiked(true) : setIsLiked(false);
-		console.log(like);
+	const toggleLikeButton = () => {
+		setIsLiked(isLiked === "" ? "active" : "");
 	};
 
-	const likeData = {
+	const data = {
 		likePostId: postId,
 		likeProfileId: profileId
 	};
 
 	const submitLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
-		httpConfig.post("/apis/like/", likeData, {
+		httpConfig.post("/apis/like/", data, {
 			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;
 				setStatus({message, type});
 				if(reply.status === 200) {
 					setStatus({message, type});
+					toggleLikeButton();
 				}
 				alert(reply.message);
 			});
@@ -41,22 +41,20 @@ export const PostLike = ({postId}) => {
 
 	const deleteLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
-		const data = {
-			likePostId:postId,
-			likeProfileId:profileId
-		};
 		httpConfig.delete("/apis/like/", {
 			headers, data})
 			.then(reply => {
 				let {message, type} = reply;
-				if(reply.status === 200) {}
+				if(reply.status === 200) {
+					toggleLikeButton();
+				}
 				alert(reply.message);
 			});
 	};
 
 	return (
 		<>
-			<Button variant="outline-danger" size="sm" onClick={deleteLike}>
+			<Button variant="outline-danger" size="sm" className={`post-like-btn ${isLiked}`} onClick={submitLike}>
 				<FontAwesomeIcon icon="heart"/>&nbsp;
 				<Badge variant="danger">999</Badge>
 			</Button>
