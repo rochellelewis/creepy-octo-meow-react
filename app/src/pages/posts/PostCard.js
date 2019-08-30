@@ -14,7 +14,7 @@ export const PostCard = ({post}) => {
 
 	// grab jwt and jwt profile id of logged in users
 	const jwt = UseJwt();
-	const profileId = UseJwtProfileId(jwt);
+	const profileId = UseJwtProfileId();
 
 	const formatDate = new Intl.DateTimeFormat('en-US', {
 		day: 'numeric',

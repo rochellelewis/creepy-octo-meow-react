@@ -17,12 +17,13 @@ export const UseJwt = () => {
 	return jwt;
 };
 
-export const UseJwtUsername = (token) => {
+export const UseJwtUsername = () => {
 	const [username, setUsername] = useState(null);
 
 	useEffect(() => {
+		const token = window.localStorage.getItem("jwt-token");
 		if(token !== null) {
-			let decodedJwt = jwtDecode(window.localStorage.getItem("jwt-token"));
+			const decodedJwt = jwtDecode(token);
 			setUsername(decodedJwt.auth.profileUsername);
 		}
 	});
@@ -30,12 +31,13 @@ export const UseJwtUsername = (token) => {
 	return username;
 };
 
-export const UseJwtProfileId = (token) => {
+export const UseJwtProfileId = () => {
 	const [profileId, setProfileId] = useState(null);
 
 	useEffect(() => {
+		const token = window.localStorage.getItem("jwt-token");
 		if(token !== null) {
-			let decodedJwt = jwtDecode(window.localStorage.getItem("jwt-token"));
+			const decodedJwt = jwtDecode(token);
 			setProfileId(decodedJwt.auth.profileId);
 		}
 	});

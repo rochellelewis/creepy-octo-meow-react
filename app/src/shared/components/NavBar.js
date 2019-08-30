@@ -13,7 +13,7 @@ export const NavBar = () => {
 
 	// grab the jwt and username for logged in users
 	const jwt = UseJwt();
-	const username = UseJwtUsername(jwt);
+	const username = UseJwtUsername();
 
 	const signOut = () => {
 		httpConfig.get("/apis/signout/")
