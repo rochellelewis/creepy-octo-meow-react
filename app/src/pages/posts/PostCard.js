@@ -1,7 +1,7 @@
 import React from "react";
 
 import {PostUsername} from "./PostUsername";
-import {UseJwt} from "../../shared/components/JwtHelpers";
+import {UseJwt, UseJwtProfileId} from "../../shared/components/JwtHelpers";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -10,8 +10,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const PostCard = ({post}) => {
 
-	// grab jwt of logged in users
+	// grab jwt and jwt profile id of logged in users
 	const jwt = UseJwt();
+	const profileId = UseJwtProfileId(jwt);
 
 	const formatDate = new Intl.DateTimeFormat('en-US', {
 		day: 'numeric',
@@ -40,8 +41,8 @@ export const PostCard = ({post}) => {
 							{formatDate.format(post.postDate)}
 						</div>
 
-						{/* conditional render post del, edit, like buttons if logged in */}
-						{(jwt !== null) && (
+						{/* conditional render del & edit buttons if logged into account that created them! */}
+						{(profileId === post.postProfileId) && (
 							<>
 								<Button variant="outline-secondary" size="sm" className="mr-2">
 									<FontAwesomeIcon icon="trash-alt"/>
@@ -49,12 +50,19 @@ export const PostCard = ({post}) => {
 								<Button variant="outline-secondary" size="sm" className="mr-2">
 									<FontAwesomeIcon icon="pencil-alt"/>
 								</Button>
+							</>
+						)}
+
+						{/* conditional render like button only if logged in */}
+						{(jwt !== null) && (
+							<>
 								<Button variant="outline-danger" size="sm">
 									<FontAwesomeIcon icon="heart"/>&nbsp;
 									<Badge variant="danger">99</Badge>
 								</Button>
 							</>
 						)}
+
 					</div>
 					<hr />
 					<Card.Text>{post.postContent}</Card.Text>
