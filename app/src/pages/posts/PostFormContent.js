@@ -84,7 +84,6 @@ export const PostFormContent = (props) => {
 				</Card.Body>
 			</Card>
 
-			{/* TODO: 200 ok message not visible on front end. errors ok. */}
 			{console.log(status)}
 			{status && (<div className={status.type}>{status.message}</div>)}
 		</>
