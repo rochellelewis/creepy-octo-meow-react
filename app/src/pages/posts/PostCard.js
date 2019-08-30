@@ -1,7 +1,7 @@
 import React from "react";
 
 import {PostUsername} from "./PostUsername";
-import {UseJwt, UseJwtProfileId} from "../../shared/components/JwtHelpers";
+import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";

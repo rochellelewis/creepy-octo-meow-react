@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
-import {UseJwt, UseJwtUsername} from "./JwtHelpers";
+import {UseJwt, UseJwtUsername} from "../misc/JwtHelpers";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";

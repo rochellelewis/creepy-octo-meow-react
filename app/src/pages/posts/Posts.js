@@ -6,8 +6,8 @@ import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
 import {getPostsAndUsers} from "../../shared/actions/get-post";
-import {UseWindowWidth} from "../../shared/components/UseWindowWidth";
-import {UseJwt} from "../../shared/components/JwtHelpers";
+import {UseWindowWidth} from "../../shared/misc/UseWindowWidth";
+import {UseJwt} from "../../shared/misc/JwtHelpers";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
