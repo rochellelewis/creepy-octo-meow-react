@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
-import {DecodeJwtUsername} from "./DecodeJwtUsername";
+import {UseJwt, UseJwtUsername} from "./JwtHelpers";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -11,7 +11,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const NavBar = () => {
 
-	const username = DecodeJwtUsername();
+	// grab the jwt and username for logged in users
+	const jwt = UseJwt();
+	const username = UseJwtUsername(jwt);
 
 	const signOut = () => {
 		httpConfig.get("/apis/signout/")
@@ -42,7 +44,7 @@ export const NavBar = () => {
 						<Nav className="ml-auto">
 
 							{/* conditional render if user has jwt / is logged in */}
-							{window.localStorage.getItem("jwt-token") !== null && (
+							{jwt !== null && (
 								<NavDropdown className="nav-link navbar-username" title={"Welcome, " + username + "!"}>
 									<NavDropdown.Item href="/profile">
 										<FontAwesomeIcon icon="user" />&nbsp; My Profile
