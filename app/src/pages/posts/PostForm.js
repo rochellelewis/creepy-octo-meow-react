@@ -36,8 +36,11 @@ export const PostForm = () => {
 				setStatus({message, type});
 				if(reply.status === 200) {
 					resetForm();
+					setStatus({message, type});
 					/*TODO: find a better way to re-render the post component!*/
-					window.location.reload();
+					setTimeout(() => {
+						window.location.reload();
+					}, 1500);
 				}
 			});
 	};
