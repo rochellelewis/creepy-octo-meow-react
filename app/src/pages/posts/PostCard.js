@@ -1,11 +1,13 @@
-import React from "react";
+import React, {useEffect} from "react";
+import {useSelector, useDispatch} from "react-redux";
 
+import {PostLike} from "./PostLike";
 import {PostUsername} from "./PostUsername";
 import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
 
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const PostCard = ({post}) => {
@@ -55,12 +57,7 @@ export const PostCard = ({post}) => {
 
 						{/* conditional render like button only if logged in */}
 						{(jwt !== null) && (
-							<>
-								<Button variant="outline-danger" size="sm">
-									<FontAwesomeIcon icon="heart"/>&nbsp;
-									<Badge variant="danger">99</Badge>
-								</Button>
-							</>
+							<PostLike postId={post.postId}/>
 						)}
 
 					</div>
