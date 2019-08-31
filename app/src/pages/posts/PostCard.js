@@ -9,12 +9,29 @@ import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {httpConfig} from "../../shared/misc/http-config";
 
 export const PostCard = ({post}) => {
 
 	// grab jwt and jwt profile id of logged in users
 	const jwt = UseJwt();
 	const profileId = UseJwtProfileId();
+
+	const deletePost = () => {
+		const headers = {'X-JWT-TOKEN': jwt};
+		const params = {id: post.postId};
+		let confirm = window.confirm("Are you sure u wanna delete this?");
+		if(confirm){
+			httpConfig.delete("/apis/post/", {
+				headers, params})
+				.then(reply => {
+					let {message, type} = reply;
+					if(reply.status === 200) {
+						window.location.reload();
+					}
+				});
+		}
+	};
 
 	const formatDate = new Intl.DateTimeFormat('en-US', {
 		day: 'numeric',
@@ -46,7 +63,7 @@ export const PostCard = ({post}) => {
 						{/* conditional render del & edit buttons if logged into account that created them! */}
 						{(profileId === post.postProfileId) && (
 							<>
-								<Button variant="outline-secondary" size="sm" className="mr-2">
+								<Button onClick={deletePost} variant="outline-secondary" size="sm" className="mr-2">
 									<FontAwesomeIcon icon="trash-alt"/>
 								</Button>
 								<Button variant="outline-secondary" size="sm" className="mr-2">
