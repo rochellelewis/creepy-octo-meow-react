@@ -5,9 +5,10 @@ import {useSelector, useDispatch} from "react-redux";
 import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
-import {getPostsAndUsers} from "../../shared/actions/get-post";
 import {UseWindowWidth} from "../../shared/misc/UseWindowWidth";
 import {UseJwt} from "../../shared/misc/JwtHelpers";
+import {getAllLikes} from "../../shared/actions/get-like";
+import {getPostsAndProfiles} from "../../shared/actions/get-post";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -37,7 +38,8 @@ export const Posts = () => {
 	// Define the side effects that will occur in the application, e.g., code that handles dispatches to redux, API requests, or timers.
 	// The dispatch function takes actions as arguments to make changes to the store/redux.
 	const effects = () => {
-		dispatch(getPostsAndUsers());
+		dispatch(getPostsAndProfiles());
+		dispatch(getAllLikes());
 	};
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.

@@ -7,7 +7,7 @@ export const getAllPosts = () => async dispatch => {
 	dispatch({type: "GET_ALL_POSTS", payload: data })
 };
 
-export const getPostsAndUsers = () => async (dispatch, getState) => {
+export const getPostsAndProfiles = () => async (dispatch, getState) => {
 	await dispatch(getAllPosts());
 
 	const profileIds = _.uniq(_.map(getState().posts, "postProfileId"));
