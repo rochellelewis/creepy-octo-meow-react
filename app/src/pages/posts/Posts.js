@@ -6,8 +6,8 @@ import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
 import {UseWindowWidth} from "../../shared/misc/UseWindowWidth";
-import {UseJwt} from "../../shared/misc/JwtHelpers";
-import {getAllLikes} from "../../shared/actions/get-like";
+import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
+import {getLikesByProfileId} from "../../shared/actions/get-like";
 import {getPostsAndProfiles} from "../../shared/actions/get-post";
 
 import Container from "react-bootstrap/Container";
@@ -28,6 +28,7 @@ export const Posts = () => {
 
 	// grab jwt for logged in users
 	const jwt = UseJwt();
+	const profileId = UseJwtProfileId();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
 	const posts = useSelector(state => (state.posts ? state.posts : []));
@@ -39,11 +40,12 @@ export const Posts = () => {
 	// The dispatch function takes actions as arguments to make changes to the store/redux.
 	const effects = () => {
 		dispatch(getPostsAndProfiles());
-		dispatch(getAllLikes());
+		dispatch(getLikesByProfileId(profileId));
+
 	};
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.
-	const inputs = [];
+	const inputs = [profileId];
 
 	/**
 	 * Pass both sideEffects and sideEffectInputs to useEffect.

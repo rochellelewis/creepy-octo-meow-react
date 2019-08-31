@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 
-import {PostLike} from "./PostLike";
+import {Like} from "../Like";
 import {PostUsername} from "./PostUsername";
 import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
 
@@ -57,7 +57,7 @@ export const PostCard = ({post}) => {
 
 						{/* conditional render like button only if logged in */}
 						{(jwt !== null) && (
-							<PostLike postId={post.postId}/>
+							<Like postId={post.postId} profileId={profileId} jwt={jwt}/>
 						)}
 
 					</div>
