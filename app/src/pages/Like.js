@@ -87,8 +87,8 @@ export const Like = ({postId}) => {
 	return (
 		<>
 			<Button variant="outline-danger" size="sm" className={`post-like-btn ${(isLiked !== null ? isLiked : "")}`} onClick={clickLike}>
-				<FontAwesomeIcon icon="heart"/>&nbsp;
-				<Badge variant="danger">{postLikes.length}</Badge>
+				<FontAwesomeIcon icon="heart"/>
+				{/*&nbsp;<Badge variant="danger">{postLikes.length}</Badge>*/}
 			</Button>
 		</>
 	)
