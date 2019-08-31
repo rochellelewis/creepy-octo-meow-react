@@ -17,5 +17,5 @@ export const getLikesByProfileId = (id) => async dispatch => {
 
 export const getLikeByPostIdAndProfileId = (postId, profileId) => async dispatch => {
 	const {data} = await httpConfig(`/apis/like/?likePostId=${postId}&likeProfileId=${profileId}`);
-	dispatch({type: "GET_LIKES_BY_POST_ID_AND_PROFILE_ID", payload: data })
+	dispatch({type: "GET_LIKE_BY_POST_ID_AND_PROFILE_ID", payload: data })
 };
