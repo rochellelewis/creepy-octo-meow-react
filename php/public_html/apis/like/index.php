@@ -57,7 +57,7 @@ try {
 			$reply->data = Like::getLikesByLikeProfileId($pdo, $likeProfileId)->toArray();
 
 		} else {
-			throw (new \InvalidArgumentException("Search parameters are invalid.", 404));
+			$reply->data = Like::getAllLikes($pdo)->toArray();
 		}
 
 	} elseif($method === "POST" || $method === "DELETE") {
