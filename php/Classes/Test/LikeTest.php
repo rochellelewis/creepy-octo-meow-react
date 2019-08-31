@@ -187,4 +187,27 @@ class LikeTest extends CreepyOctoMeowTest {
 		$like = Like::getLikeByLikePostIdAndLikeProfileId($this->getPDO(), generateUuidV4(), generateUuidV4());
 		$this->assertNull($like);
 	}
+
+	/**
+	 * test grabbing all likes
+	 **/
+	public function testGetAllValidLikes() {
+		//count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("like");
+
+		//create a like and insert
+		$like = new Like($this->post->getPostId(), $this->profile->getProfileId());
+		$like->insert($this->getPDO());
+
+		//grab the posts from mysql, verify row count and namespace is correct
+		$results = Like::getAllLikes($this->getPDO());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("like"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\CreepyOctoMeow\\Like", $results);
+
+		//verify that all fields match
+		$pdoPost = $results[0];
+		$this->assertEquals($pdoPost->getLikePostId(), $this->post->getPostId());
+		$this->assertEquals($pdoPost->getLikeProfileId(), $this->profile->getProfileId());
+	}
 }

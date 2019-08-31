@@ -267,6 +267,36 @@ class Like implements \JsonSerializable {
 	}
 
 	/**
+	 * gets all Likes
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Likes found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllLikes(\PDO $pdo) : \SplFixedArray {
+		//create query template
+		$query = "SELECT likePostId, likeProfileId FROM `like`";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		//build an array of posts
+		$likes = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$like = new Like($row["likePostId"], $row["likeProfileId"]);
+				$likes[$likes->key()] = $like;
+				$likes->next();
+			} catch(\Exception $exception) {
+				throw (new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($likes);
+	}
+
+	/**
 	 * formats the state variables for JSON serialization
 	 *
 	 * @return array resulting state variables to serialize
