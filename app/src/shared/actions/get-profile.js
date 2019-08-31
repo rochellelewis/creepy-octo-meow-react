@@ -11,6 +11,6 @@ export const getProfileByProfileId = (id) => async dispatch => {
 };
 
 export const getProfileByProfileEmail = (email) => async dispatch => {
-	const {data} = await httpConfig(`/apis/profile/${email}`);
+	const {data} = await httpConfig(`/apis/profile/?profileEmail=${email}`);
 	dispatch({type: "GET_PROFILE_BY_PROFILE_EMAIL", payload: data })
 };

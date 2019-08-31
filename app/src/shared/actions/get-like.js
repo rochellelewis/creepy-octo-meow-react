@@ -6,12 +6,12 @@ export const getAllLikes = () => async dispatch => {
 };
 
 export const getLikesByPostId = () => async dispatch => {
-	const {data} = await httpConfig('/apis/like/');
+	const {data} = await httpConfig(`/apis/like/?likePostId=${id}`);
 	dispatch({type: "GET_LIKES_BY_POST_ID", payload: data })
 };
 
 export const getLikesByProfileId = () => async dispatch => {
-	const {data} = await httpConfig('/apis/like/');
+	const {data} = await httpConfig(`/apis/like/?likeProfileId=${id}`);
 	dispatch({type: "GET_LIKES_BY_PROFILE_ID", payload: data })
 };
 
