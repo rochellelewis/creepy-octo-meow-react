@@ -57,7 +57,7 @@ export const PostCard = ({post}) => {
 
 						{/* conditional render like button only if logged in */}
 						{(jwt !== null) && (
-							<Like postId={post.postId} profileId={profileId} jwt={jwt}/>
+							<Like postId={post.postId}/>
 						)}
 
 					</div>

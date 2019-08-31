@@ -7,8 +7,12 @@ import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {getLikesByPostId} from "../shared/actions/get-like";
+import {UseJwt, UseJwtProfileId} from "../shared/misc/JwtHelpers";
 
-export const Like = ({postId, profileId, jwt}) => {
+export const Like = ({postId}) => {
+
+	const jwt = UseJwt();
+	const profileId = UseJwtProfileId();
 
 	// Returns profileLikes and postLikes from the likes store from redux and assigns it to the posts variable.
 	// See: like-reducer.js
