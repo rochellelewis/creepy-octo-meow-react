@@ -32,7 +32,7 @@ CREATE TABLE `like` (
 	likeProfileId BINARY(16) NOT NULL,
 	INDEX (likePostId),
 	INDEX (likeProfileId),
-	FOREIGN KEY (likePostId) REFERENCES post(postId),
+	FOREIGN KEY (likePostId) REFERENCES post(postId) ON DELETE CASCADE,
 	FOREIGN KEY (likeProfileId) REFERENCES profile(profileId),
 	PRIMARY KEY (likePostId, likeProfileId)
 )
