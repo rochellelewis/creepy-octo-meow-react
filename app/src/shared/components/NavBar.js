@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
 import {UseJwt, UseJwtUsername} from "../misc/JwtHelpers";
@@ -21,7 +21,6 @@ export const NavBar = () => {
 				let {message, type} = reply;
 				if(reply.status === 200) {
 					window.localStorage.removeItem("jwt-token");
-					alert(reply.message);
 					console.log(reply);
 					setTimeout(() => {
 						window.location = "/";
