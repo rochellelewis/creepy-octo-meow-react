@@ -7,7 +7,7 @@ import {PostCard} from "./PostCard";
 
 import {UseWindowWidth} from "../../shared/misc/UseWindowWidth";
 import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
-import {getLikesByProfileId} from "../../shared/actions/get-like";
+import {getAllLikes} from "../../shared/actions/get-like";
 import {getPostsAndProfiles} from "../../shared/actions/get-post";
 
 import Container from "react-bootstrap/Container";
@@ -40,8 +40,7 @@ export const Posts = () => {
 	// The dispatch function takes actions as arguments to make changes to the store/redux.
 	const effects = () => {
 		dispatch(getPostsAndProfiles());
-		dispatch(getLikesByProfileId(profileId));
-
+		dispatch(getAllLikes());
 	};
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.

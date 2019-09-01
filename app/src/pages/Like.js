@@ -1,24 +1,16 @@
 import React, {useState, useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {httpConfig} from "../shared/misc/http-config";
 import _ from "lodash";
 
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {getLikesByPostId} from "../shared/actions/get-like";
-import {UseJwt, UseJwtProfileId} from "../shared/misc/JwtHelpers";
+import {UseJwt} from "../shared/misc/JwtHelpers";
 
-export const Like = ({postId}) => {
+export const Like = ({profileId, postId}) => {
 
 	const jwt = UseJwt();
-	const profileId = UseJwtProfileId();
-
-	// Returns profileLikes and postLikes from the likes store from redux and assigns it to the posts variable.
-	// See: like-reducer.js
-	const profileLikes = useSelector(state => (state.likes.profileLikes ? state.likes.profileLikes : []));
-
-	const postLikes = useSelector(state => (state.likes.postLikes ? state.likes.postLikes: []));
 
 	/*
 	* The isLiked state variable sets the button color
@@ -26,22 +18,28 @@ export const Like = ({postId}) => {
 	* */
 	const [isLiked, setIsLiked] = useState(null);
 
-	const dispatch = useDispatch();
+	// Return all likes from the redux store
+	const likes = useSelector(state => (state.likes ? state.likes : []));
+
+	// Filter likes from store and create a subset of likes by postId
+	const postLikes = likes.filter(like => like.likePostId === postId);
 
 	const effects = () => {
-		initializeLikes(postId);
+		initializeLikes(profileId);
 	};
 
 	const inputs = [postId];
 	useEffect(effects, inputs);
 
 	/*
-	* This function sets the isLiked state variable to
-	* "active" if the logged in user has liked the post.
+	* This function filters over the likes from the store,
+	* and sets the isLiked state variable to "active" if
+	* the logged in user has liked the post.
 	*
 	* See: Lodash https://lodash.com
 	* */
-	const initializeLikes = (postId) => {
+	const initializeLikes = (profileId) => {
+		const profileLikes = likes.filter(like => like.likeProfileId === profileId);
 		const liked = _.find(profileLikes, {'likePostId': postId});
 		return (_.isEmpty(liked) === false) && setIsLiked("active");
 	};
@@ -121,8 +119,8 @@ export const Like = ({postId}) => {
 	return (
 		<>
 			<Button variant="outline-danger" size="sm" className={`post-like-btn ${(isLiked !== null ? isLiked : "")}`} onClick={clickLike}>
-				<FontAwesomeIcon icon="heart"/>
-				{/*&nbsp;<Badge variant="danger">{postLikes.length}</Badge>*/}
+				<FontAwesomeIcon icon="heart"/>&nbsp;
+				<Badge variant="danger">{postLikes.length}</Badge>
 			</Button>
 		</>
 	)
