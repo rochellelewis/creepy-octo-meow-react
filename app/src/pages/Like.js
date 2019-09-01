@@ -61,8 +61,25 @@ export const Like = ({postId}) => {
 			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;
+
 				if(reply.status === 200) {
 					toggleLike();
+				}
+
+				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
+				if(reply.status === 401) {
+					alert("Session inactive. Please log in again.");
+					httpConfig.get("/apis/signout/")
+						.then(reply => {
+							let {message, type} = reply;
+							if(reply.status === 200) {
+								window.localStorage.removeItem("jwt-token");
+								console.log(reply);
+								setTimeout(() => {
+									window.location = "/";
+								}, 1500);
+							}
+						});
 				}
 			});
 	};
@@ -73,8 +90,25 @@ export const Like = ({postId}) => {
 			headers, data})
 			.then(reply => {
 				let {message, type} = reply;
+
 				if(reply.status === 200) {
 					toggleLike();
+				}
+
+				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
+				if(reply.status === 401) {
+					alert("Session inactive. Please log in again.");
+					httpConfig.get("/apis/signout/")
+						.then(reply => {
+							let {message, type} = reply;
+							if(reply.status === 200) {
+								window.localStorage.removeItem("jwt-token");
+								console.log(reply);
+								setTimeout(() => {
+									window.location = "/";
+								}, 1500);
+							}
+						});
 				}
 			});
 	};

@@ -34,6 +34,7 @@ export const PostForm = () => {
 			.then(reply => {
 				let {message, type} = reply;
 				setStatus({message, type});
+
 				if(reply.status === 200) {
 					resetForm();
 					setStatus({message, type});
@@ -41,6 +42,22 @@ export const PostForm = () => {
 					setTimeout(() => {
 						window.location.reload();
 					}, 1500);
+				}
+
+				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
+				if(reply.status === 401) {
+					alert("Session inactive. Please log in again.");
+					httpConfig.get("/apis/signout/")
+						.then(reply => {
+							let {message, type} = reply;
+							if(reply.status === 200) {
+								window.localStorage.removeItem("jwt-token");
+								console.log(reply);
+								setTimeout(() => {
+									window.location = "/";
+								}, 1500);
+							}
+						});
 				}
 			});
 	};

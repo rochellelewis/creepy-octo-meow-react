@@ -26,8 +26,25 @@ export const PostCard = ({post}) => {
 				headers, params})
 				.then(reply => {
 					let {message, type} = reply;
+
 					if(reply.status === 200) {
 						window.location.reload();
+					}
+
+					// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
+					if(reply.status === 401) {
+						alert("Session inactive. Please log in again.");
+						httpConfig.get("/apis/signout/")
+							.then(reply => {
+								let {message, type} = reply;
+								if(reply.status === 200) {
+									window.localStorage.removeItem("jwt-token");
+									console.log(reply);
+									setTimeout(() => {
+										window.location = "/";
+									}, 1500);
+								}
+							});
 					}
 				});
 		}
