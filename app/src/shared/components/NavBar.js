@@ -1,7 +1,7 @@
 import React from "react";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
-import {UseJwt, UseJwtUsername} from "../misc/JwtHelpers";
+import {UseJwt, UseJwtProfileId, UseJwtUsername} from "../misc/JwtHelpers";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -14,6 +14,7 @@ export const NavBar = () => {
 	// grab the jwt and username for logged in users
 	const jwt = UseJwt();
 	const username = UseJwtUsername();
+	const profileId = UseJwtProfileId();
 
 	const signOut = () => {
 		httpConfig.get("/apis/signout/")
@@ -46,7 +47,7 @@ export const NavBar = () => {
 							{jwt !== null && (
 								<NavDropdown className="nav-link navbar-username" title={"Welcome, " + username + "!"}>
 									<div className="dropdown-item">
-										<Link to="/profile" className="nav-link">
+										<Link to={`/profile/${profileId}`} className="nav-link">
 											<FontAwesomeIcon icon="user" />&nbsp;&nbsp;My Profile
 										</Link>
 									</div>

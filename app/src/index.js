@@ -50,8 +50,8 @@ const Routing = (store) => (
 					<Route exact path="/" component={Home}/>
 					<Route exact path="/about" component={About}/>
 					<Route exact path="/posts" component={Posts}/>
-					<Route exact path="/profile" component={Profile}/>
 					<Route exact path="/signup" component={Signup}/>
+					<Route exact path="/profile/:profileId" component={Profile} profileId=":profileId"/>
 					<Route component={FourOhFour}/>
 				</Switch>
 			</div>
