@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {httpConfig} from "../shared/misc/http-config";
 import {UseJwt} from "../shared/misc/JwtHelpers";
+import {handleSessionTimeout} from "../shared/misc/handle-session-timeout";
 import _ from "lodash";
 
 import Badge from "react-bootstrap/Badge";
@@ -73,26 +74,13 @@ export const Like = ({profileId, postId}) => {
 			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;
-
 				if(reply.status === 200) {
 					toggleLike();
 					setLikeCount(likeCount + 1);
 				}
-
 				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
 				if(reply.status === 401) {
-					alert("Session inactive. Please log in again.");
-					httpConfig.get("/apis/signout/")
-						.then(reply => {
-							let {message, type} = reply;
-							if(reply.status === 200) {
-								window.localStorage.removeItem("jwt-token");
-								console.log(reply);
-								setTimeout(() => {
-									window.location = "/";
-								}, 1500);
-							}
-						});
+					handleSessionTimeout();
 				}
 			});
 	};
@@ -103,26 +91,13 @@ export const Like = ({profileId, postId}) => {
 			headers, data})
 			.then(reply => {
 				let {message, type} = reply;
-
 				if(reply.status === 200) {
 					toggleLike();
 					setLikeCount(likeCount > 0 ? likeCount - 1 : 0);
 				}
-
 				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
 				if(reply.status === 401) {
-					alert("Session inactive. Please log in again.");
-					httpConfig.get("/apis/signout/")
-						.then(reply => {
-							let {message, type} = reply;
-							if(reply.status === 200) {
-								window.localStorage.removeItem("jwt-token");
-								console.log(reply);
-								setTimeout(() => {
-									window.location = "/";
-								}, 1500);
-							}
-						});
+					handleSessionTimeout();
 				}
 			});
 	};

@@ -1,15 +1,16 @@
 import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import {httpConfig} from "../../shared/misc/http-config";
+import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
+import {handleSessionTimeout} from "../../shared/misc/handle-session-timeout";
 
 import {Like} from "../Like";
 import {PostUsername} from "./PostUsername";
-import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
 
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {httpConfig} from "../../shared/misc/http-config";
 
 export const PostCard = ({post}) => {
 
@@ -26,25 +27,12 @@ export const PostCard = ({post}) => {
 				headers, params})
 				.then(reply => {
 					let {message, type} = reply;
-
 					if(reply.status === 200) {
 						window.location.reload();
 					}
-
 					// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
 					if(reply.status === 401) {
-						alert("Session inactive. Please log in again.");
-						httpConfig.get("/apis/signout/")
-							.then(reply => {
-								let {message, type} = reply;
-								if(reply.status === 200) {
-									window.localStorage.removeItem("jwt-token");
-									console.log(reply);
-									setTimeout(() => {
-										window.location = "/";
-									}, 1500);
-								}
-							});
+						handleSessionTimeout();
 					}
 				});
 		}
