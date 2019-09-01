@@ -1,24 +1,26 @@
 import React, {useState, useEffect} from "react";
 import {useSelector} from "react-redux";
 import {httpConfig} from "../shared/misc/http-config";
+import {UseJwt} from "../shared/misc/JwtHelpers";
 import _ from "lodash";
 
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {UseJwt} from "../shared/misc/JwtHelpers";
 
 export const Like = ({profileId, postId}) => {
 
+	// grab the jwt for logged in users
 	const jwt = UseJwt();
 
 	/*
 	* The isLiked state variable sets the button color
-	* whether the logged in user has liked the post.
+	* whether or not the logged in user has liked the post.
+	*
+	* The likeCount state variable counts likes.
 	* */
 	const [isLiked, setIsLiked] = useState(null);
 	const [likeCount, setLikeCount] = useState(0);
-
 
 	// Return all likes from the redux store
 	const likes = useSelector(state => (state.likes ? state.likes : []));
@@ -36,6 +38,8 @@ export const Like = ({profileId, postId}) => {
 	* and sets the isLiked state variable to "active" if
 	* the logged in user has liked the post.
 	*
+	* This makes the buttons red.
+	*
 	* See: Lodash https://lodash.com
 	* */
 	const initializeLikes = (profileId) => {
@@ -44,6 +48,11 @@ export const Like = ({profileId, postId}) => {
 		return (_.isEmpty(liked) === false) && setIsLiked("active");
 	};
 
+	/*
+	* This function filters over the likes from the store,
+	* creating a subset of likes for this postId. The
+	* likeCount state variable is set to the length of this set.
+	* */
 	const countLikes = () => {
 		const postLikes = likes.filter(like => like.likePostId === postId);
 		return (setLikeCount(postLikes.length));
