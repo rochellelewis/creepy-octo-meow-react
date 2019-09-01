@@ -17,15 +17,15 @@ export const Like = ({profileId, postId}) => {
 	* whether the logged in user has liked the post.
 	* */
 	const [isLiked, setIsLiked] = useState(null);
+	const [likeCount, setLikeCount] = useState(0);
+
 
 	// Return all likes from the redux store
 	const likes = useSelector(state => (state.likes ? state.likes : []));
 
-	// Filter likes from store and create a subset of likes by postId
-	const postLikes = likes.filter(like => like.likePostId === postId);
-
 	const effects = () => {
 		initializeLikes(profileId);
+		countLikes();
 	};
 
 	const inputs = [postId];
@@ -42,6 +42,11 @@ export const Like = ({profileId, postId}) => {
 		const profileLikes = likes.filter(like => like.likeProfileId === profileId);
 		const liked = _.find(profileLikes, {'likePostId': postId});
 		return (_.isEmpty(liked) === false) && setIsLiked("active");
+	};
+
+	const countLikes = () => {
+		const postLikes = likes.filter(like => like.likePostId === postId);
+		return (setLikeCount(postLikes.length));
 	};
 
 	const data = {
@@ -62,6 +67,7 @@ export const Like = ({profileId, postId}) => {
 
 				if(reply.status === 200) {
 					toggleLike();
+					setLikeCount(likeCount + 1);
 				}
 
 				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
@@ -91,6 +97,7 @@ export const Like = ({profileId, postId}) => {
 
 				if(reply.status === 200) {
 					toggleLike();
+					setLikeCount(likeCount > 0 ? likeCount - 1 : 0);
 				}
 
 				// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
@@ -120,7 +127,7 @@ export const Like = ({profileId, postId}) => {
 		<>
 			<Button variant="outline-danger" size="sm" className={`post-like-btn ${(isLiked !== null ? isLiked : "")}`} onClick={clickLike}>
 				<FontAwesomeIcon icon="heart"/>&nbsp;
-				<Badge variant="danger">{postLikes.length}</Badge>
+				<Badge variant="danger">{likeCount}</Badge>
 			</Button>
 		</>
 	)
