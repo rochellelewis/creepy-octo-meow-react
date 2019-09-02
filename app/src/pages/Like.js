@@ -70,7 +70,7 @@ export const Like = ({profileId, postId}) => {
 
 	const submitLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
-		httpConfig.post("/apis/like/", data, {
+		httpConfig.post("apis/like/", data, {
 			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;
@@ -87,7 +87,7 @@ export const Like = ({profileId, postId}) => {
 
 	const deleteLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
-		httpConfig.delete("/apis/like/", {
+		httpConfig.delete("apis/like/", {
 			headers, data})
 			.then(reply => {
 				let {message, type} = reply;

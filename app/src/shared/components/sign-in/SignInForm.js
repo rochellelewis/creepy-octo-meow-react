@@ -21,7 +21,7 @@ export const SignInForm = () => {
 	});
 
 	const submitSignIn = (values, {resetForm, setStatus}) => {
-		httpConfig.post("/apis/signin/", values)
+		httpConfig.post("apis/signin/", values)
 			.then(reply => {
 				let {message, type} = reply;
 				if(reply.status === 200 && reply.headers["x-jwt-token"]) {
@@ -29,7 +29,7 @@ export const SignInForm = () => {
 					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
 					setTimeout(() => {
-						window.location = "/posts";
+						window.location = "https://bootcamp-coders.cnm.edu/~rlewis37/creepy-octo-meow-react/php/public_html/#/posts";
 					}, 1500);
 				}
 				setStatus({message, type});

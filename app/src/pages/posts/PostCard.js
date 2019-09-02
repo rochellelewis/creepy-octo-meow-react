@@ -23,7 +23,7 @@ export const PostCard = ({post}) => {
 		const params = {id: post.postId};
 		let confirm = window.confirm("Are you sure u wanna delete this?");
 		if(confirm){
-			httpConfig.delete("/apis/post/", {
+			httpConfig.delete("apis/post/", {
 				headers, params})
 				.then(reply => {
 					let {message, type} = reply;

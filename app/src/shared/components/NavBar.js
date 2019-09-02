@@ -17,14 +17,14 @@ export const NavBar = () => {
 	const profileId = UseJwtProfileId();
 
 	const signOut = () => {
-		httpConfig.get("/apis/signout/")
+		httpConfig.get("apis/signout/")
 			.then(reply => {
 				let {message, type} = reply;
 				if(reply.status === 200) {
 					window.localStorage.removeItem("jwt-token");
 					console.log(reply);
 					setTimeout(() => {
-						window.location = "/";
+						window.location = "https://bootcamp-coders.cnm.edu/~rlewis37/creepy-octo-meow-react/php/public_html/";
 					}, 1500);
 				}
 			});

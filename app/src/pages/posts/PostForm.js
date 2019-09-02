@@ -30,7 +30,7 @@ export const PostForm = () => {
 			'X-JWT-TOKEN': window.localStorage.getItem("jwt-token")
 		};
 
-		httpConfig.post("/apis/post/", values, {
+		httpConfig.post("apis/post/", values, {
 			headers: headers})
 			.then(reply => {
 				let {message, type} = reply;

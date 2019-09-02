@@ -3,7 +3,7 @@ import _ from "lodash";
 import {getProfileByProfileId} from "./get-profile";
 
 export const getAllPosts = () => async dispatch => {
-	const {data} = await httpConfig('/apis/post/');
+	const {data} = await httpConfig('apis/post/');
 	dispatch({type: "GET_ALL_POSTS", payload: data })
 };
 
