@@ -55,12 +55,12 @@ export const Posts = () => {
 
 	return (
 		<>
-			<main className="my-5 py-5">
-				<Container fluid="true">
+			<main className="my-5">
+				<Container fluid="true" className="py-5">
 					<Row>
 
 						{/*BEGIN FORM PANEL*/}
-						<Col md={4} className="posts-form-panel position-fixed">
+						<Col md={4} className={`posts-form-panel position-fixed ${(jwt === null && "panel-position-reset")}`}>
 
 							{/* This nested ternary will render the PostForm only if jwt !== null,
 							otherwise show signin/signup links. Then render the post form in either

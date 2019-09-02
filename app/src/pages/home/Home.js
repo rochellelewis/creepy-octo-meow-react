@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 export const Home = () => {
 	return (
 		<>
-			<main className="d-flex align-items-center mh-80">
+			<main className="d-flex align-items-center mh-100">
 				<Container fluid="true">
 					<Row>
 						<Col sm={6} lg={{span: 4, offset: 1}}>

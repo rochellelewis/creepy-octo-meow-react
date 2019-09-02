@@ -12,10 +12,10 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 export const Signup = () => {
 	return (
 		<>
-			<main className="d-flex align-items-center mh-80 mt-5">
-				<Container fluid="true">
+			<main className="d-flex align-items-center mh-100 my-5 my-md-0">
+				<Container fluid="true" className="py-5">
 					<Row>
-						<Col sm={6} lg={{span: 4, offset: 1}}>
+						<Col md={6} lg={{span: 4, offset: 1}}>
 							<Card bg="transparent" className="border-0 rounded-0">
 								<Card.Header>
 									<h3>Sign Up!</h3>
@@ -25,7 +25,7 @@ export const Signup = () => {
 								</Card.Body>
 							</Card>
 						</Col>
-						<Col sm={6} lg={{span: 5, offset: 1}}>
+						<Col md={6} lg={{span: 5, offset: 1}}>
 							<Card bg="transparent" className="border-0 rounded-0">
 								<Card.Header>
 									<h3>Privacy Notice:</h3>

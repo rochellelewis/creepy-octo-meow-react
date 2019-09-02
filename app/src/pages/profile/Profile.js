@@ -32,8 +32,8 @@ export const Profile = ({match}) => {
 
 	return (
 		<>
-			<main className="mh-80 mt-5 py-5 d-flex align-items-center">
-				<Container fluid="true">
+			<main className="mh-100 d-flex align-items-center">
+				<Container fluid="true" className="py-5">
 					<Row>
 						<Col md="8">
 							<Card bg="light">
