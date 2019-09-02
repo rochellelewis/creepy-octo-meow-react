@@ -10,13 +10,28 @@ import Card from "react-bootstrap/Card";
 export const Signup = () => {
 	return (
 		<>
-			<main className="d-flex align-items-center mh-80">
+			<main className="d-flex align-items-center mh-80 mt-5">
 				<Container fluid="true">
 					<Row>
 						<Col sm={6} lg={{span: 4, offset: 1}}>
 							<Card bg="transparent" className="border-0 rounded-0">
+								<Card.Header>
+									<h3>Sign Up!</h3>
+								</Card.Header>
 								<Card.Body>
 									<SignUpForm/>
+								</Card.Body>
+							</Card>
+						</Col>
+						<Col sm={6} lg={{span: 5, offset: 1}}>
+							<Card bg="transparent" className="border-0 rounded-0">
+								<Card.Header>
+									<h3>Privacy Notice:</h3>
+								</Card.Header>
+								<Card.Body>
+									<p>This app has been created for educational purposes. <span className="font-weight-bold">Profile usernames, email addresses, and posts created here will be publicly viewable via the API</span>, so please keep this in mind before you sign up.</p>
+									<p>We will never spam you. Promise.</p>
+									<p>If you'd like to generate an anonymous private email address to use here, give <a href="https://www.sharklasers.com" target="_blank">Sharklasers</a> a try!</p>
 								</Card.Body>
 							</Card>
 						</Col>
