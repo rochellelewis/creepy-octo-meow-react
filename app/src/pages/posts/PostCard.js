@@ -1,10 +1,11 @@
-import React, {useEffect} from "react";
-import {useSelector, useDispatch} from "react-redux";
+import React from "react";
 import {httpConfig} from "../../shared/misc/http-config";
+
 import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
 import {handleSessionTimeout} from "../../shared/misc/handle-session-timeout";
 
 import {Like} from "../Like";
+import {PostEdit} from "./PostEdit";
 import {PostUsername} from "./PostUsername";
 
 import Badge from "react-bootstrap/Badge";
@@ -71,9 +72,8 @@ export const PostCard = ({post}) => {
 								<Button onClick={deletePost} variant="outline-secondary" size="sm" className="mr-2">
 									<FontAwesomeIcon icon="trash-alt"/>
 								</Button>
-								<Button variant="outline-secondary" size="sm" className="mr-2">
-									<FontAwesomeIcon icon="pencil-alt"/>
-								</Button>
+
+								<PostEdit postId={post.postId}/>
 							</>
 						)}
 
