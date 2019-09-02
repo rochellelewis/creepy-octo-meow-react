@@ -9,8 +9,8 @@ import Card from "react-bootstrap/Card";
 export const About = () => {
 	return (
 		<>
-			<main className="mh-80 mt-5 py-5 d-flex align-items-center">
-				<Container fluid="true">
+			<main className="mh-100 d-flex align-items-center my-5 my-md-0">
+				<Container fluid="true" className="py-5">
 					<Row>
 						<Col md={6}>
 							<h1>About Us</h1>
@@ -27,7 +27,7 @@ export const About = () => {
 								</Card.Body>
 							</Card>
 							<div className="my-2 text-right">
-								<span className="font-weight-light font-italic">Don't have an account?&nbsp;</span>
+								<span className="font-weight-light font-italic">Don't have an account?&nbsp;&nbsp;</span>
 								<Link className="btn btn-primary btn-sm" to="/signup">Sign up today!</Link>
 							</div>
 						</Col>

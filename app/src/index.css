@@ -1,5 +1,6 @@
 /***
-* Meow App 5 Theme
+* Meow App 7.0 Theme
+* ...in progress :P
 * @author rlewis37@cnm.edu
 ***/
 
@@ -14,21 +15,12 @@ h4, .h4,
 	font-family: 'Audiowide', sans-serif;
 }
 
-/*h1, .h1 {
-	color: #ffc107 !important;
-	font-size: 4rem;
-}*/
-
 button {
 	cursor: pointer;
 }
 
 hr {
 	border-color: rgba(0,0,0,0.15);
-}
-
-main {
-	/*margin-top: 10vh;*/
 }
 
 /* UTILS */
@@ -71,33 +63,15 @@ body { width: 100%;}
 	flex: 1 0 auto;
 }
 
-/* BODY */
-/*body {
-	background-color: #000;
-	position: relative;
-	background: url("shared/img/meow-app.jpg") no-repeat 40% center;
-}*/
-
-/*body::after {
-	content: "";
-	background: url("shared/img/meow-app.jpg") no-repeat 40% center;
-	background-attachment: fixed;
-	filter: grayscale(0.75) opacity(0.5);
-	position:absolute;
-	height: 100%;
-	width: 100%;
-	z-index: -1;
-}*/
-
-/*@media only screen and (min-width: 768px) {
-	body::after {
-		background-position-x: center;
-	}
-}*/
-
 /* HEADER */
 nav {
 	border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+div.dropdown-item.sign-out-dropdown:active,
+div.dropdown-item.sign-out-dropdown:hover,
+.dropdown-item.active, .dropdown-item:active {
+	background-color: transparent;
 }
 
 /* POSTS */
@@ -115,6 +89,12 @@ nav {
 	}
 }
 
+@media only screen and (max-width: 768px) {
+	.posts-form-panel.panel-position-reset {
+		position: static !important;
+	}
+}
+
 button,
 .card,
 .modal-content {
@@ -122,33 +102,7 @@ button,
 	border: none;
 }
 
-/*.card {
-	position: relative;
-}*/
-
-/*button.post-delete {
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 1;
-}*/
-
-/*.card-title {
-	color: #007bff;
-}*/
-
-/*.blue-card {
-	background: #007bff;
-	color: #fff !important;
-	text-align: center !important;
-}
-
-.blue-card .card-title,
-.blue-card .text-muted {
-	color: #fff !important;
-}*/
-
 /* FOOTER */
 footer.page-footer {
-
+	border-top: 1px solid #ccc;
 }
