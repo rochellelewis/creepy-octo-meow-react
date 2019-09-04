@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
+import {Redirect} from "react-router-dom";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
+
 import {UseJwt, UseJwtProfileId, UseJwtUsername} from "../misc/JwtHelpers";
 
 import Navbar from "react-bootstrap/Navbar";
@@ -16,6 +18,9 @@ export const NavBar = () => {
 	const username = UseJwtUsername();
 	const profileId = UseJwtProfileId();
 
+	// state variable to handle redirect on sign out
+	const [toHome, setToHome] = useState(null);
+
 	const signOut = () => {
 		httpConfig.get("/apis/signout/")
 			.then(reply => {
@@ -24,7 +29,7 @@ export const NavBar = () => {
 					window.localStorage.removeItem("jwt-token");
 					console.log(reply);
 					setTimeout(() => {
-						window.location = "/";
+						setToHome(true);
 					}, 1500);
 				}
 			});
@@ -32,6 +37,9 @@ export const NavBar = () => {
 
 	return (
 		<>
+			{/* redirect user to home page on sign out */}
+			{toHome ? <Redirect to="/"/> : null}
+
 			<header>
 				<Navbar bg="light" expand="md" variant="light" fixed="top">
 					<Link to="/">

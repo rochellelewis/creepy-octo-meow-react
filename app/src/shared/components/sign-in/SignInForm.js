@@ -8,6 +8,7 @@ import {SignInFormContent} from "./SignInFormContent";
 
 export const SignInForm = () => {
 
+	// state variable to handle redirect to posts page on sign in
 	const [toPosts, setToPosts] = useState(null);
 
 	const signIn = {
@@ -41,7 +42,9 @@ export const SignInForm = () => {
 
 	return (
 		<>
+			{/* redirect user to posts page on sign in */}
 			{toPosts ? <Redirect to="/posts" /> : null}
+
 			<Formik
 				initialValues={signIn}
 				onSubmit={submitSignIn}
