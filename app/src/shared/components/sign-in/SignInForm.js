@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Redirect} from "react-router";
 import {httpConfig} from "../../misc/http-config";
 import * as Yup from "yup";
 import {Formik} from "formik";
@@ -6,6 +7,8 @@ import {Formik} from "formik";
 import {SignInFormContent} from "./SignInFormContent";
 
 export const SignInForm = () => {
+
+	const [toPosts, setToPosts] = useState(null);
 
 	const signIn = {
 		signinEmail: "",
@@ -29,7 +32,7 @@ export const SignInForm = () => {
 					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
 					setTimeout(() => {
-						window.location = "/posts";
+						setToPosts(true);
 					}, 1500);
 				}
 				setStatus({message, type});
@@ -37,13 +40,15 @@ export const SignInForm = () => {
 	};
 
 	return (
-		<Formik
-			initialValues={signIn}
-			onSubmit={submitSignIn}
-			validationSchema={validator}
-		>
-			{SignInFormContent}
-		</Formik>
+		<>
+			{toPosts ? <Redirect to="/posts" /> : null}
+			<Formik
+				initialValues={signIn}
+				onSubmit={submitSignIn}
+				validationSchema={validator}
+			>
+				{SignInFormContent}
+			</Formik>
+		</>
 	)
-
 };
