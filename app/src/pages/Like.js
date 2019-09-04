@@ -28,10 +28,10 @@ export const Like = ({profileId, postId}) => {
 
 	const effects = () => {
 		initializeLikes(profileId);
-		countLikes();
+		countLikes(postId);
 	};
 
-	const inputs = [postId];
+	const inputs = [profileId, postId];
 	useEffect(effects, inputs);
 
 	/*
@@ -54,7 +54,7 @@ export const Like = ({profileId, postId}) => {
 	* creating a subset of likes for this postId. The
 	* likeCount state variable is set to the length of this set.
 	* */
-	const countLikes = () => {
+	const countLikes = (postId) => {
 		const postLikes = likes.filter(like => like.likePostId === postId);
 		return (setLikeCount(postLikes.length));
 	};
