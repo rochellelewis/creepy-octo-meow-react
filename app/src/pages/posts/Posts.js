@@ -28,7 +28,6 @@ export const Posts = () => {
 
 	// grab jwt for logged in users
 	const jwt = UseJwt();
-	const profileId = UseJwtProfileId();
 
 	// Returns the posts store from redux and assigns it to the posts variable.
 	const posts = useSelector(state => (state.posts ? state.posts : []));
@@ -44,7 +43,7 @@ export const Posts = () => {
 	};
 
 	// Declare any inputs that will be used by functions that are declared in sideEffects.
-	const inputs = [profileId];
+	const inputs = [];
 
 	/**
 	 * Pass both sideEffects and sideEffectInputs to useEffect.
