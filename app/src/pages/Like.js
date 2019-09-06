@@ -15,10 +15,11 @@ export const Like = ({profileId, postId}) => {
 	const jwt = UseJwt();
 
 	/*
-	* The isLiked state variable sets the button color
+	* The isLiked state variable sets the button color to red
 	* whether or not the logged in user has liked the post.
+	* "active" is a bootstrap class that will be added to the button.
 	*
-	* The likeCount state variable counts likes.
+	* The likeCount state variable holds the like count for each post.
 	* */
 	const [isLiked, setIsLiked] = useState(null);
 	const [likeCount, setLikeCount] = useState(0);
@@ -31,13 +32,14 @@ export const Like = ({profileId, postId}) => {
 		countLikes(postId);
 	};
 
-	const inputs = [profileId, postId];
+	// add likes to inputs - this informs React that likes are being updated from Redux. Ensures proper component rendering.
+	const inputs = [likes, profileId, postId];
 	useEffect(effects, inputs);
 
 	/*
 	* This function filters over the likes from the store,
 	* and sets the isLiked state variable to "active" if
-	* the logged in user has liked the post.
+	* the logged in user has already liked the post.
 	*
 	* This makes the buttons red.
 	*
