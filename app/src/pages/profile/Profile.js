@@ -18,6 +18,7 @@ export const Profile = ({match}) => {
 	const currentProfileId = UseJwtProfileId();
 
 	// Return the profile by profileId from the redux store
+	//TODO: fix this. Prob grabbing profile[0] from profiles loaded in Posts! Match the currentProfileId to find/match profile by profileId on the profiles already in redux store?
 	const profile = useSelector(state => (state.profile ? state.profile[0] : []));
 	console.log(profile);
 
