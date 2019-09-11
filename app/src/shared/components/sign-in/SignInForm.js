@@ -33,8 +33,9 @@ export const SignInForm = () => {
 					window.localStorage.setItem("jwt-token", reply.headers["x-jwt-token"]);
 					resetForm();
 					setTimeout(() => {
-						setToPosts(true);
-					}, 1500);
+						// setToPosts(true);
+						window.location = "/posts";
+					}, 750);
 				}
 				setStatus({message, type});
 			});
@@ -43,7 +44,7 @@ export const SignInForm = () => {
 	return (
 		<>
 			{/* redirect user to posts page on sign in */}
-			{toPosts ? <Redirect to="/posts" /> : null}
+			{/*{toPosts ? <Redirect to="/posts" /> : null}*/}
 
 			<Formik
 				initialValues={signIn}

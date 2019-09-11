@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Redirect} from "react-router-dom";
 import {httpConfig} from "../misc/http-config";
 import {Link} from "react-router-dom";
@@ -13,10 +13,18 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const NavBar = () => {
 
+	const [token, setToken] = useState(null);
+
 	// grab the jwt and username for logged in users
 	const jwt = UseJwt();
 	const username = UseJwtUsername();
 	const profileId = UseJwtProfileId();
+	console.log(jwt);
+
+	useEffect(() => {
+		let token = window.localStorage.getItem("jwt-token");
+		setToken(token);
+	}, [token]);
 
 	// state variable to handle redirect on sign out
 	const [toHome, setToHome] = useState(null);
@@ -28,9 +36,8 @@ export const NavBar = () => {
 				if(reply.status === 200) {
 					window.localStorage.removeItem("jwt-token");
 					console.log(reply);
-					setTimeout(() => {
-						setToHome(true);
-					}, 1500);
+					window.location = "/";
+					// setToHome(true);
 				}
 			});
 	};
@@ -38,7 +45,7 @@ export const NavBar = () => {
 	return (
 		<>
 			{/* redirect user to home page on sign out */}
-			{toHome ? <Redirect to="/"/> : null}
+			{/*{toHome ? <Redirect to="/"/> : null}*/}
 
 			<header>
 				<Navbar bg="light" expand="md" variant="light" fixed="top">
