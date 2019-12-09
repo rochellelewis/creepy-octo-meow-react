@@ -15,16 +15,17 @@ export const Like = ({profileId, postId}) => {
 	const jwt = UseJwt();
 
 	/*
-	* The isLiked state variable sets the button color to red
-	* whether or not the logged in user has liked the post.
-	* "active" is a bootstrap class that will be added to the button.
+	* State Variables
 	*
-	* The likeCount state variable holds the like count for each post.
+	* isLiked will hold a text value that will set the button color
+	* to red whether or not the logged in user has liked the post.
+	*
+	* likeCount holds the number of likes for each post by postId.
 	* */
 	const [isLiked, setIsLiked] = useState(null);
 	const [likeCount, setLikeCount] = useState(0);
 
-	// Return all likes from the redux store
+	// Grab all likes from the redux store
 	const likes = useSelector(state => (state.likes ? state.likes : []));
 
 	const effects = () => {
@@ -32,16 +33,16 @@ export const Like = ({profileId, postId}) => {
 		countLikes(postId);
 	};
 
-	// add likes to inputs - this informs React that likes are being updated from Redux. Ensures proper component rendering.
+	// add likes to inputs - this informs React that likes are being updated from Redux. This ensures proper component rendering.
 	const inputs = [likes, profileId, postId];
 	useEffect(effects, inputs);
 
 	/*
-	* This function filters over the likes from the store,
-	* and sets the isLiked state variable to "active" if
-	* the logged in user has already liked the post.
+	* initializeLikes function filters over all the likes
+	* from the Redux store, and sets the isLiked state variable
+	* to "active" if the logged in user has already liked the post.
 	*
-	* This makes the buttons red.
+	* "active" is a Bootstrap class that makes the buttons red.
 	*
 	* See: Lodash https://lodash.com
 	* */
@@ -52,24 +53,38 @@ export const Like = ({profileId, postId}) => {
 	};
 
 	/*
-	* This function filters over the likes from the store,
-	* creating a subset of likes for this postId. The
-	* likeCount state variable is set to the length of this set.
+	* countLikes function filters over the likes from the Redux store,
+	* creating a subset of likes for this postId.
+	*
+	* The likeCount state variable is set to the length of this set.
 	* */
 	const countLikes = (postId) => {
 		const postLikes = likes.filter(like => like.likePostId === postId);
 		return (setLikeCount(postLikes.length));
 	};
 
+	/*
+	* data object gets passed in Axios POST and DELETE requests.
+	* See submitLike and deleteLike below.
+	* */
 	const data = {
 		likePostId: postId,
 		likeProfileId: profileId
 	};
 
+	/*
+	* toggleLike gets called when a Like is successfully created or deleted by the user.
+	* This toggles the state of the isLiked variable.
+	*
+	* See submitLike and deleteLike.
+	* */
 	const toggleLike = () => {
 		setIsLiked(isLiked === null ? "active" : null);
 	};
 
+	/*
+	* User posts a Like.
+	* */
 	const submitLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
 		httpConfig.post("/apis/like/", data, {
@@ -87,6 +102,9 @@ export const Like = ({profileId, postId}) => {
 			});
 	};
 
+	/*
+	* User deletes a Like.
+	* */
 	const deleteLike = () => {
 		const headers = {'X-JWT-TOKEN': jwt};
 		httpConfig.delete("/apis/like/", {
@@ -104,7 +122,9 @@ export const Like = ({profileId, postId}) => {
 			});
 	};
 
-	// fire this function onclick
+	/*
+	* Fire this function onclick!
+	* */
 	const clickLike = () => {
 		(isLiked === "active") ? deleteLike() : submitLike();
 	};
