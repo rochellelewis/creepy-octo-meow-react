@@ -1,6 +1,5 @@
 <?php
  namespace Edu\Cnm\CreepyOctoMeow\Test;
-
  use Edu\Cnm\CreepyOctoMeow\{Profile};
 
  //grab the class under scrutiny
