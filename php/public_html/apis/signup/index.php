@@ -84,6 +84,7 @@ try {
 		$profileActivationToken = bin2hex(random_bytes(16));
 
 		//create new password hash for Profile
+		//$hash = password_hash($requestObject->signupPassword, PASSWORD_ARGON2I, ["time_cost" => 9]);
 		$hash = password_hash($requestObject->signupPassword, PASSWORD_ARGON2I, ["time_cost" => 384]);
 
 		//create a new Profile and insert into mysql
