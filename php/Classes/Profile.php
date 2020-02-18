@@ -218,6 +218,11 @@ class Profile implements \JsonSerializable {
 		if(strlen($newProfileHash) !== 97) {
 			throw (new \RangeException("Profile password hash invalid length."));
 		}
+		/*
+		 * New valid length check
+		 * if(strlen($newProfileHash) > 97 || strlen($newProfileHash) < 89 ) {
+   throw(new \RangeException("user hash is out of range"'));
+		*/
 
 		//store password hash value
 		$this->profileHash = $newProfileHash;
