@@ -60,7 +60,7 @@ class ProfileTest extends CreepyOctoMeowTest {
 
 		//create valid password hash
 		$password = "abc123";
-		$this->VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 384]);
+		$this->VALID_HASH = password_hash($password, PASSWORD_ARGON2I, ["time_cost" => 9]);
 	}
 
 	/**
