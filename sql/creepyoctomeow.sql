@@ -9,7 +9,7 @@ CREATE TABLE profile (
 	profileId BINARY(16) NOT NULL,
 	profileActivationToken CHAR(32),
 	profileEmail VARCHAR(128) NOT NULL,
-	profileHash CHAR(97) NOT NULL,
+	profileHash VARCHAR(97) NOT NULL,
 	profileUsername VARCHAR(64) NOT NULL,
 	UNIQUE (profileEmail),
 	UNIQUE (profileUsername),
