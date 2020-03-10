@@ -44,6 +44,10 @@ hr {
 	text-shadow: 1px 1px #000;
 }
 
+.bg-transparent-90 {
+	background-color: rgba(255,255,255,0.9);
+}
+
 /***
 * Flexbox Sticky Footer
 * http://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/

@@ -51,7 +51,7 @@ export const PostCard = ({post}) => {
 
 	return (
 		<>
-			<Card className="mb-3">
+			<Card className="mb-3 bg-transparent-90">
 				<Card.Header>
 					<h3 className="panel-title my-0">{post.postTitle}</h3>
 				</Card.Header>
