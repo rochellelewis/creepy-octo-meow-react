@@ -1,6 +1,6 @@
 import React from "react"
 
-import {SignInForm} from "../../shared/components/sign-in/SignInForm";
+import {SignInForm} from "../shared/components/sign-in/SignInForm";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

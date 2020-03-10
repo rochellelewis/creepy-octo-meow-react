@@ -13,12 +13,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 import "./index.css";
 import {NavBar} from "./shared/components/NavBar";
 import {Footer} from "./shared/components/Footer";
-import {Home} from "./pages/home/Home";
-import {About} from "./pages/about/About";
+import {Home} from "./pages/Home";
+import {About} from "./pages/About";
 import {Posts} from "./pages/posts/Posts";
-import {Profile} from "./pages/profile/Profile";
+import {Profile} from "./pages/Profile";
 import {Signup} from "./pages/signup/Signup";
-import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
+import {FourOhFour} from "./pages/FourOhFour";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {far} from "@fortawesome/free-regular-svg-icons";
