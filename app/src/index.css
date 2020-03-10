@@ -90,6 +90,11 @@ div.dropdown-item.sign-out-dropdown:hover,
 	margin-top: 60px;
 }
 
+/* no pointer on disabled like button! */
+button.post-like-btn:disabled {
+	cursor: unset;
+}
+
 @media only screen and (min-width: 768px){
 	.posts-panel {
 		margin-top: 0;
