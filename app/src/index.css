@@ -63,6 +63,13 @@ body { width: 100%;}
 	flex: 1 0 auto;
 }
 
+/* GLOBAL */
+/* this is how to apply a background image */
+#root {
+	background: url("shared/img/cat.jpg") no-repeat center left fixed;
+	background-size: cover;
+}
+
 /* HEADER */
 nav {
 	border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -100,9 +107,4 @@ button,
 .modal-content {
 	border-radius: 0 !important;
 	border: none;
-}
-
-/* FOOTER */
-footer.page-footer {
-	border-top: 1px solid #ccc;
 }
