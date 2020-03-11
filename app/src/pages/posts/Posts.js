@@ -92,11 +92,15 @@ export const Posts = () => {
 
 						{/* BEGIN POST ITEMS */}
 						<Col md={{span: 8, offset: 4}} className="posts-panel">
-							{posts.map(post =>
-								<PostCard post={post} key={post.postId} />
-							)}
-						</Col>
+							{/* create an inner row for grid like layout*/}
+							<Row>
 
+								{posts.map(post =>
+									<PostCard post={post} key={post.postId} />
+								)}
+
+							</Row>
+						</Col>
 					</Row>
 				</Container>
 			</main>

@@ -8,9 +8,10 @@ import {Like} from "../Like";
 import {PostEdit} from "./PostEdit";
 import {PostUsername} from "./PostUsername";
 
-import Badge from "react-bootstrap/Badge";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Badge from "react-bootstrap/Badge";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export const PostCard = ({post}) => {
@@ -51,39 +52,41 @@ export const PostCard = ({post}) => {
 
 	return (
 		<>
-			<Card className="mb-3 bg-transparent-90">
-				<Card.Header>
-					<h3 className="panel-title my-0">{post.postTitle}</h3>
-				</Card.Header>
-				<Card.Body>
-					<div className="d-flex justify-content-end">
-						<div className="d-inline-block small text-muted mr-auto my-auto">
-							<h6 className="d-sm-inline-block">
-								<Badge className="p-1 mr-2" variant="secondary">By:&nbsp;
-									<PostUsername profileId={post.postProfileId} />
-								</Badge>
-							</h6>
-							{formatDate.format(post.postDate)}
-						</div>
+				<Col xl={6}>
+					<Card className="mb-3 bg-transparent-90">
+						<Card.Header>
+							<h3 className="panel-title my-0">{post.postTitle}</h3>
+						</Card.Header>
+						<Card.Body>
+							<div className="d-flex justify-content-end">
+								<div className="d-inline-block small text-muted mr-auto my-auto">
+									<h6 className="d-sm-inline-block">
+										<Badge className="p-1 mr-2" variant="secondary">By:&nbsp;
+											<PostUsername profileId={post.postProfileId} />
+										</Badge>
+									</h6>
+									{formatDate.format(post.postDate)}
+								</div>
 
-						{/* conditional render del & edit buttons if logged into account that created them! */}
-						{(profileId === post.postProfileId) && (
-							<>
-								<Button onClick={deletePost} variant="outline-secondary" size="sm" className="mr-2">
-									<FontAwesomeIcon icon="trash-alt"/>
-								</Button>
+								{/* conditional render del & edit buttons if logged into account that created them! */}
+								{(profileId === post.postProfileId) && (
+									<>
+										<Button onClick={deletePost} variant="outline-secondary" size="sm" className="mr-2">
+											<FontAwesomeIcon icon="trash-alt"/>
+										</Button>
 
-								<PostEdit postId={post.postId}/>
-							</>
-						)}
+										<PostEdit postId={post.postId}/>
+									</>
+								)}
 
-						<Like profileId={profileId} postId={post.postId}/>
+								<Like profileId={profileId} postId={post.postId}/>
 
-					</div>
-					<hr />
-					<Card.Text>{post.postContent}</Card.Text>
-				</Card.Body>
-			</Card>
+							</div>
+							<hr />
+							<Card.Text>{post.postContent}</Card.Text>
+						</Card.Body>
+					</Card>
+				</Col>
 		</>
 	)
 };
