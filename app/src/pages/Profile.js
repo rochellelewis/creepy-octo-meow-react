@@ -3,7 +3,6 @@ import {useSelector, useDispatch} from "react-redux";
 import {UseJwtProfileId} from "../shared/misc/JwtHelpers";
 
 import {getAllProfiles} from "../shared/actions/get-profile";
-import _ from "lodash";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -18,10 +17,9 @@ export const Profile = ({match}) => {
 	// Return all profiles from the redux store
 	const profiles = useSelector(state => (state.profile ? state.profile : []));
 
-	// Grab the profile off of the profiles array that matches the profileId from the URL. We're using Lodash here for now.
-	// TODO: replace lodash with ES6 pls!
-	const profile = _.find(profiles, {'profileId': match.params.profileId});
-	console.log(profile); //check it
+	// Grab the profile off of the profiles object that matches the profileId from the URL.
+	const profile = profiles.find(function (o) {return o.profileId === match.params.profileId});
+	console.log(profile); //check it!
 
 	const dispatch = useDispatch();
 
