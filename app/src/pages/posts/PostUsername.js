@@ -4,8 +4,7 @@ import {useSelector} from "react-redux";
 export const PostUsername = ({profileId}) => {
 
 	const profile = useSelector((state) => {
-		//console.log(state);
-		return state.profile ? state.profile.find( profile => profileId === profile.profileId) : null
+		return state.profile ? state.profile.find(profile => profileId === profile.profileId) : null
 	});
 
 	return (
