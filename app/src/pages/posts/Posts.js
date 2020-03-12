@@ -6,7 +6,7 @@ import {PostForm} from "./PostForm";
 import {PostCard} from "./PostCard";
 
 import {UseWindowWidth} from "../../shared/misc/UseWindowWidth";
-import {UseJwt, UseJwtProfileId} from "../../shared/misc/JwtHelpers";
+import {UseJwt} from "../../shared/misc/JwtHelpers";
 import {getAllLikes} from "../../shared/actions/get-like";
 import {getPostsAndProfiles} from "../../shared/actions/get-post";
 
@@ -29,7 +29,7 @@ export const Posts = () => {
 	// grab jwt for logged in users
 	const jwt = UseJwt();
 
-	// Returns the posts store from redux and assigns it to the posts variable.
+	// Returns all posts from redux store and assigns it to the posts variable.
 	const posts = useSelector(state => (state.posts ? state.posts : []));
 
 	// assigns useDispatch reference to the dispatch variable for later use.
