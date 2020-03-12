@@ -2,33 +2,35 @@ import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {UseJwtProfileId} from "../shared/misc/JwtHelpers";
 
+import {getAllProfiles} from "../shared/actions/get-profile";
+import _ from "lodash";
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/es/FormControl";
-import Button from "react-bootstrap/Button";
-import {getProfileByProfileId} from "../shared/actions/get-profile";
 
 export const Profile = ({match}) => {
 
-	// grab the profile id from the currently logged in account, or null if not found
+	// grab the profile id from the JWT for the currently logged in account
 	const currentProfileId = UseJwtProfileId();
 
-	// Return the profile by profileId from the redux store
-	//TODO: fix this. Prob grabbing profile[0] from profiles loaded in Posts! Match the currentProfileId to find/match profile by profileId on the profiles already in redux store?
-	const profile = useSelector(state => (state.profile ? state.profile[0] : []));
-	console.log(profile);
+	// Return all profiles from the redux store
+	const profiles = useSelector(state => (state.profile ? state.profile : []));
+
+	// Grab the profile off of the profiles array that matches the profileId from the URL. We're using Lodash here for now.
+	// TODO: replace lodash with ES6 pls!
+	const profile = _.find(profiles, {'profileId': match.params.profileId});
+	console.log(profile); //check it
 
 	const dispatch = useDispatch();
 
 	const effects = () => {
-		dispatch(getProfileByProfileId(match.params.profileId));
+		dispatch(getAllProfiles());
 	};
 
-	const inputs = [match.params.profileId];
+	// inform react that profiles are being updated from redux
+	const inputs = [profiles];
 	useEffect(effects, inputs);
 
 	return (
