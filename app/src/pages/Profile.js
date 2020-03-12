@@ -51,7 +51,6 @@ export const Profile = ({match}) => {
 										<>
 											<div>Your Profile Id: {profile && profile.profileId}</div>
 											<div>Your Email Address: {profile && profile.profileEmail}</div>
-											<div>Your Activation Token: {(profile) && profile.profileActivationToken}</div>
 										</>
 									)}
 
