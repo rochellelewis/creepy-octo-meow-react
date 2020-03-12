@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import {httpConfig} from "../shared/misc/http-config";
 import {UseJwt} from "../shared/misc/JwtHelpers";
 import {handleSessionTimeout} from "../shared/misc/handle-session-timeout";
+
 import _ from "lodash";
 
 import Badge from "react-bootstrap/Badge";
@@ -44,11 +45,15 @@ export const Like = ({profileId, postId}) => {
 	*
 	* "active" is a Bootstrap class that makes the buttons red.
 	*
+	* We're using Lodash _.isEmpty because it's an easy way to check for an empty object. .entries and .values are not working as of now.
+	*
 	* See: Lodash https://lodash.com
 	* */
 	const initializeLikes = (profileId) => {
 		const profileLikes = likes.filter(like => like.likeProfileId === profileId);
-		const liked = _.find(profileLikes, {'likePostId': postId});
+		const liked = profileLikes.find(function(o) {return o.likePostId === postId});
+
+		//TODO: replace lodash w/ ES6
 		return (_.isEmpty(liked) === false) && setIsLiked("active");
 	};
 
