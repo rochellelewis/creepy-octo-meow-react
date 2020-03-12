@@ -27,8 +27,7 @@ export const Profile = ({match}) => {
 		dispatch(getAllProfiles());
 	};
 
-	// inform react that profiles are being updated from redux
-	const inputs = [profiles];
+	const inputs = [];
 	useEffect(effects, inputs);
 
 	return (
