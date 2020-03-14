@@ -35,19 +35,19 @@ export const Profile = ({match}) => {
 			<main className="mh-100 d-flex align-items-center">
 				<Container fluid="true" className="py-5">
 					<Row>
-						<Col md="8">
-							<Card bg="light">
+						<Col md="5">
+							<Card className="bg-transparent-90">
 								<Card.Header>
 									<h2 className="my-0">Hello, {profile && profile.profileUsername}!</h2>
 								</Card.Header>
 								<Card.Body>
-									<div>Username: {profile && profile.profileUsername}</div>
+									<div><span className="font-weight-bold">Username</span>: {profile && profile.profileUsername}</div>
 
 									{/* only show the private profile data if logged into the same account! */}
 									{(profile && profile.profileId === currentProfileId) && (
 										<>
-											<div>Your Profile Id: {profile && profile.profileId}</div>
-											<div>Your Email Address: {profile && profile.profileEmail}</div>
+											<div><span className="font-weight-bold">Your Profile Id</span>: {profile && profile.profileId}</div>
+											<div><span className="font-weight-bold">Your Email Address</span>: {profile && profile.profileEmail}</div>
 										</>
 									)}
 
