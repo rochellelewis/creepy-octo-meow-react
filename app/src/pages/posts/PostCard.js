@@ -30,6 +30,7 @@ export const PostCard = ({post}) => {
 				.then(reply => {
 					let {message, type} = reply;
 					if(reply.status === 200) {
+						// TODO: fix this janky ass sh*t pls :poop:
 						window.location.reload();
 					}
 					// if there's an issue with a $_SESSION mismatch with xsrf or jwt, alert user and do a sign out
