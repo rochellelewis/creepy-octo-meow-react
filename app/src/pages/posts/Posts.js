@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 
@@ -17,6 +17,8 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import FormLabel from "react-bootstrap/FormLabel";
+import Form from "react-bootstrap/Form";
 
 export const Posts = () => {
 
@@ -29,8 +31,19 @@ export const Posts = () => {
 	// grab jwt for logged in users
 	const jwt = UseJwt();
 
+	// state variables for search terms
+	const [searchQuery, setSearchQuery] = useState('');
+
+	// handle change event for search form
+	const handleChange = event => {
+		setSearchQuery(event.target.value);
+	};
+
 	// Returns all posts from redux store and assigns it to the posts variable.
-	const posts = useSelector(state => (state.posts ? state.posts : []));
+	const statePosts = useSelector(state => (state.posts ? state.posts : []));
+
+	// Search filter posts based on the entered search term, the post title and post content
+	const posts = statePosts.filter(post => post.postContent.includes(searchQuery) || post.postTitle.includes(searchQuery));
 
 	// assigns useDispatch reference to the dispatch variable for later use.
 	const dispatch = useDispatch();
@@ -56,9 +69,26 @@ export const Posts = () => {
 		<>
 			<main className="my-5">
 				<Container fluid="true" className="py-5">
-					<Row>
+					<Row className="py-3 mb-3">
+						<Col md={4}>
+							<h2 className="mb-0">Post A Meow</h2>
+						</Col>
+						<Col md={8}>
+							{/* SEARCH FORM */}
+							<Form inline>
+								<FormLabel className="h2 mr-4">Search Posts:</FormLabel>
+								<Form.Control type="text"
+												  placeholder="Search"
+												  id="search-text"
+												  onChange={handleChange}
+												  value={searchQuery}
+								/>
+							</Form>
+						</Col>
+					</Row>
 
-						{/*BEGIN FORM PANEL*/}
+					<Row>
+						{/* BEGIN FORM PANEL */}
 						<Col md={4} className={`posts-form-panel position-fixed ${(jwt === null && "panel-position-reset")}`}>
 
 							{/* This nested ternary will render the PostForm only if jwt !== null,
